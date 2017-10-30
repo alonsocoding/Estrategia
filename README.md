@@ -1,3 +1,3 @@
 # Estrategia
 Monitor para la Creacion y Manejo de las Estrategias de Respaldo
-:smile:
+:poop: :poop: :poop: :poop: :poop: :poop:
