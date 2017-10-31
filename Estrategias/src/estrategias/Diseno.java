@@ -16,6 +16,7 @@ public class Diseno extends javax.swing.JFrame {
      */
     public Diseno() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -29,6 +30,9 @@ public class Diseno extends javax.swing.JFrame {
 
         jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
         jCheckBoxMenuItem2 = new javax.swing.JCheckBoxMenuItem();
+        TipoGroup = new javax.swing.ButtonGroup();
+        ModoGroup = new javax.swing.ButtonGroup();
+        MetodoGroup = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -87,23 +91,28 @@ public class Diseno extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Tipo de respaldo: ");
 
+        TipoGroup.add(jRadioButton1);
         jRadioButton1.setText("Frio");
 
+        TipoGroup.add(jRadioButton2);
         jRadioButton2.setText("Caliente");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setText("Modo de respaldo: ");
 
+        ModoGroup.add(jRadioButton3);
         jRadioButton3.setText("Manual");
-        jRadioButton3.setActionCommand("Manual");
 
+        ModoGroup.add(jRadioButton4);
         jRadioButton4.setText("Automatico");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Metodo de respaldo: ");
 
+        MetodoGroup.add(jRadioButton5);
         jRadioButton5.setText("Archive");
 
+        MetodoGroup.add(jRadioButton6);
         jRadioButton6.setText("No Archive");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -160,6 +169,11 @@ public class Diseno extends javax.swing.JFrame {
         jTextField5.setText("0");
 
         jButton1.setText("Cerrar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Guardar");
 
@@ -202,7 +216,7 @@ public class Diseno extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jRadioButton6))
                                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(168, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jSeparator1)
                         .addContainerGap())
@@ -251,7 +265,7 @@ public class Diseno extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(72, 72, 72)))
-                        .addGap(0, 173, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -334,6 +348,10 @@ public class Diseno extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -370,6 +388,9 @@ public class Diseno extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup MetodoGroup;
+    private javax.swing.ButtonGroup ModoGroup;
+    private javax.swing.ButtonGroup TipoGroup;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
