@@ -15,12 +15,14 @@ public class Estrategia {
     public String modo_respaldo;
     public String metodo_respaldo;
     public String objetos;
+    public String nombre_periodo;
     
-    public Estrategia(String ne, String tr, String mr, String mer, String ob) {
+    public Estrategia(String ne, String tr, String mr, String mer, String ob, String np) {
         this.nombre_estrategia = ne;
         this.tipo_respaldo = tr;
         this.modo_respaldo = mr;
         this.metodo_respaldo = mer;
         this.objetos = ob;
+        this.nombre_periodo = np;
     }
 }

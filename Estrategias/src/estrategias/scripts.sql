@@ -1,3 +1,5 @@
+-- CORRER ESTE SCRIPT ANTES --
+
 -- Drop tables --
 
 drop table Contiene;
@@ -35,7 +37,7 @@ create table Estrategia (
     tipo_respaldo varchar(20),
     modo_respaldo varchar(20),
     metodo_respaldo varchar(20),
-    objectos varchar(100),
+    objetos varchar(100),
     nombre_periodo varchar(20),
     constraint pkEstrategia primary key (nombre_estrategia),
     constraint fkEstrategia foreign key (nombre_periodo) references Periodo

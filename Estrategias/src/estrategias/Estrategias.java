@@ -5,6 +5,7 @@
  */
 package estrategias;
 
+import static estrategias.EnviarEstrategia.servidores;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -48,6 +49,8 @@ public class Estrategias extends javax.swing.JFrame {
         estrategias.addColumn("Tipo");
         estrategias.addColumn("Modo");
         estrategias.addColumn("Metodo");
+        estrategias.addColumn("Objetos");
+        estrategias.addColumn("Periodo");
         getEstrategias();
     }
 
@@ -127,13 +130,13 @@ public class Estrategias extends javax.swing.JFrame {
 
         TableEstrategias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Nombre", "Tipo", "Modo", "Metodo"
+                "Nombre", "Tipo", "Modo", "Metodo", "Objetos", "Periodo"
             }
         ));
         jScrollPane3.setViewportView(TableEstrategias);
@@ -167,6 +170,11 @@ public class Estrategias extends javax.swing.JFrame {
         });
 
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/estrategias/refresh.png"))); // NOI18N
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -251,7 +259,8 @@ public class Estrategias extends javax.swing.JFrame {
                 estrategias.getValueAt(selectedRow, 1).toString(),
                 estrategias.getValueAt(selectedRow, 2).toString(),
                 estrategias.getValueAt(selectedRow, 3).toString(),
-                servidores.getValueAt(selectedRow, 4).toString());
+                estrategias.getValueAt(selectedRow, 4).toString(),
+                estrategias.getValueAt(selectedRow, 5).toString());
         EnviarEstrategia ee = new EnviarEstrategia(es);
         ee.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -273,6 +282,12 @@ public class Estrategias extends javax.swing.JFrame {
         Periodo pd = new Periodo();
         pd.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        eliminar();
+        getServidores();
+        getEstrategias();
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -308,6 +323,20 @@ public class Estrategias extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void eliminar(){
+        servidores = (DefaultTableModel) TableServidores.getModel();
+        int a = TableServidores.getRowCount()-1;
+            for (int i = a; i >= 0; i--) {           
+                servidores.removeRow(servidores.getRowCount()-1);
+            }
+        estrategias = (DefaultTableModel) TableEstrategias.getModel();
+        int b = TableEstrategias.getRowCount()-1;
+            for (int i = b; i >= 0; i--) {           
+                estrategias.removeRow(estrategias.getRowCount()-1);
+            }
+    }
+    
     
     // Carga los servidores en table
     public static void getServidores() {

@@ -59,6 +59,18 @@ public class Dao {
         st.executeQuery("commit");
     }
     
+    public static void insertEstrategia(Estrategia es) throws SQLException {
+        st = Sta(st);
+        st.executeQuery("insert into Estrategia values('"+es.nombre_estrategia+"','"+es.tipo_respaldo+"','"+es.modo_respaldo+"','"+es.metodo_respaldo+"','"+es.objetos+"','"+es.nombre_periodo+"')");
+        st.executeQuery("commit");
+    }
+    
+    public static void insertPeriodo(Periodos pe) throws SQLException {
+        st = Sta(st);
+        st.executeQuery("insert into Periodo values('"+pe.nombre_periodo+"','"+0+"','"+0+"','"+0+"','"+0+"','"+0+"','"+0+"','"+0+"','"+pe.hora+"','"+pe.minuto+"','"+pe.segundo+"')");
+        st.executeQuery("commit");
+    }
+    
     public static void insertContiene(String nombre_servidor, String nombre_estrategia) throws SQLException {
         st = Sta(st);
         st.executeQuery("insert into Contiene values('"+nombre_servidor+"', '"+nombre_estrategia+"')");

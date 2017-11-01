@@ -5,8 +5,10 @@
  */
 package estrategias;
 
+import static estrategias.Estrategias.conn;
 import java.awt.Color;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -58,22 +60,22 @@ public class Diseno extends javax.swing.JFrame {
         MetodoGroup = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        TextNombreEstrategia = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        Frio = new javax.swing.JRadioButton();
+        Caliente = new javax.swing.JRadioButton();
         jLabel4 = new javax.swing.JLabel();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
+        Manual = new javax.swing.JRadioButton();
+        Automatico = new javax.swing.JRadioButton();
         jLabel5 = new javax.swing.JLabel();
-        jRadioButton5 = new javax.swing.JRadioButton();
-        jRadioButton6 = new javax.swing.JRadioButton();
+        Archive = new javax.swing.JRadioButton();
+        NoArchive = new javax.swing.JRadioButton();
         jLabel6 = new javax.swing.JLabel();
         jCheckBox1 = new javax.swing.JCheckBox();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        TextNamePeriodo = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
@@ -112,37 +114,37 @@ public class Diseno extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Tipo de respaldo: ");
 
-        TipoGroup.add(jRadioButton1);
-        jRadioButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton1.setText("Frio");
+        TipoGroup.add(Frio);
+        Frio.setForeground(new java.awt.Color(255, 255, 255));
+        Frio.setText("Frio");
 
-        TipoGroup.add(jRadioButton2);
-        jRadioButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton2.setText("Caliente");
+        TipoGroup.add(Caliente);
+        Caliente.setForeground(new java.awt.Color(255, 255, 255));
+        Caliente.setText("Caliente");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Modo de respaldo: ");
 
-        ModoGroup.add(jRadioButton3);
-        jRadioButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton3.setText("Manual");
+        ModoGroup.add(Manual);
+        Manual.setForeground(new java.awt.Color(255, 255, 255));
+        Manual.setText("Manual");
 
-        ModoGroup.add(jRadioButton4);
-        jRadioButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton4.setText("Automatico");
+        ModoGroup.add(Automatico);
+        Automatico.setForeground(new java.awt.Color(255, 255, 255));
+        Automatico.setText("Automatico");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Metodo de respaldo: ");
 
-        MetodoGroup.add(jRadioButton5);
-        jRadioButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton5.setText("Archive");
+        MetodoGroup.add(Archive);
+        Archive.setForeground(new java.awt.Color(255, 255, 255));
+        Archive.setText("Archive");
 
-        MetodoGroup.add(jRadioButton6);
-        jRadioButton6.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton6.setText("No Archive");
+        MetodoGroup.add(NoArchive);
+        NoArchive.setForeground(new java.awt.Color(255, 255, 255));
+        NoArchive.setText("No Archive");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
@@ -196,6 +198,11 @@ public class Diseno extends javax.swing.JFrame {
         });
 
         jButton2.setText("Guardar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         Tablespaces.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -245,20 +252,20 @@ public class Diseno extends javax.swing.JFrame {
                                                 .addComponent(jLabel3)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(TextNombreEstrategia, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jRadioButton3)
+                                                .addComponent(Manual)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jRadioButton4))
+                                                .addComponent(Automatico))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGap(2, 2, 2)
-                                                .addComponent(jRadioButton1)
+                                                .addComponent(Frio)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jRadioButton2))
+                                                .addComponent(Caliente))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jRadioButton5)
+                                                .addComponent(Archive)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jRadioButton6)))
+                                                .addComponent(NoArchive)))
                                         .addGap(37, 37, 37)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
@@ -272,7 +279,7 @@ public class Diseno extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel9)
                                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(TextNamePeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel8))
                                 .addGap(149, 149, 149)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -309,7 +316,7 @@ public class Diseno extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TextNombreEstrategia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addComponent(jCheckBox1))
                 .addGap(18, 18, 18)
@@ -317,17 +324,17 @@ public class Diseno extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(jRadioButton1)
-                            .addComponent(jRadioButton2))
+                            .addComponent(Frio)
+                            .addComponent(Caliente))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jRadioButton3)
+                            .addComponent(Manual)
                             .addComponent(jLabel4)
-                            .addComponent(jRadioButton4))
+                            .addComponent(Automatico))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jRadioButton5)
-                            .addComponent(jRadioButton6)
+                            .addComponent(Archive)
+                            .addComponent(NoArchive)
                             .addComponent(jLabel5)))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -364,7 +371,7 @@ public class Diseno extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(TextNamePeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel9)
                 .addGap(18, 18, 18)
@@ -378,6 +385,33 @@ public class Diseno extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+        String tipo = Frio.isSelected() ? Frio.getText() : Caliente.getText();
+        String modo = Manual.isSelected() ? Manual.getText() : Automatico.getText();
+        String metodo = Archive.isSelected() ? Archive.getText() : NoArchive.getText();
+        String objetos = "";
+        for(int i=0; i<Tablespaces.getRowCount(); i++) {
+            if(Tablespaces.getValueAt(i, 1).toString() == "true")
+                objetos += Tablespaces.getValueAt(i, 0).toString() + ",";
+        }
+        
+        conn = Dao.Enlace(conn);
+        
+        Periodos pe = new Periodos(TextNamePeriodo.getText(),false,false,false,false,false,false,false,0,0,0);
+        Dao.insertPeriodo(pe);
+        Estrategia es = new Estrategia(TextNombreEstrategia.getText(),tipo,modo,metodo,objetos,TextNamePeriodo.getText()); 
+        Dao.insertEstrategia(es);
+
+        conn.close();
+        
+        JOptionPane.showMessageDialog(null, "La estrategia se ha registrado correctamente");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -442,7 +476,6 @@ public class Diseno extends javax.swing.JFrame {
     @Override
     public void setValueAt(Object aValue, int row, int column) {
       if (aValue instanceof Boolean && column == 1) {
-        System.out.println(aValue);
         Vector rowData = (Vector)getDataVector().get(row);
         rowData.set(1, (boolean)aValue);
         fireTableCellUpdated(row, column);
@@ -453,10 +486,18 @@ public class Diseno extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton Archive;
+    private javax.swing.JRadioButton Automatico;
+    private javax.swing.JRadioButton Caliente;
     private javax.swing.JTable Dias;
+    private javax.swing.JRadioButton Frio;
+    private javax.swing.JRadioButton Manual;
     private javax.swing.ButtonGroup MetodoGroup;
     private javax.swing.ButtonGroup ModoGroup;
+    private javax.swing.JRadioButton NoArchive;
     private javax.swing.JTable Tablespaces;
+    private javax.swing.JTextField TextNamePeriodo;
+    private javax.swing.JTextField TextNombreEstrategia;
     private javax.swing.ButtonGroup TipoGroup;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -476,17 +517,9 @@ public class Diseno extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
-    private javax.swing.JRadioButton jRadioButton5;
-    private javax.swing.JRadioButton jRadioButton6;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;

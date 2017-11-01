@@ -32,7 +32,7 @@ public class EnviarEstrategia extends javax.swing.JFrame {
     static DefaultTableModel servidores = new DefaultTableModel();
     static int selectedRow;
     
-    Estrategia es = new Estrategia("","","","","");
+    Estrategia es = new Estrategia("","","","","","");
     
     public EnviarEstrategia() {
         initComponents();
