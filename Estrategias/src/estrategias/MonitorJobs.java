@@ -5,6 +5,15 @@
  */
 package estrategias;
 
+import static estrategias.Estrategias.conn;
+import static estrategias.Estrategias.estrategias;
+import java.awt.Color;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author alonso
@@ -14,9 +23,32 @@ public class MonitorJobs extends javax.swing.JFrame {
     /**
      * Creates new form MonitorJobs
      */
+    static Connection conn = null;
+    static Statement sta = null;
+    static ResultSet res = null;
+    static DefaultTableModel estrategias = new DefaultTableModel();
+    static int selectedRow;
+    
+    Servidor se = new Servidor("","","","","",0);
+    
     public MonitorJobs() {
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+    
+    public MonitorJobs(Servidor se) {
+        initComponents();
+        this.setLocationRelativeTo(null);
+        this.se = se;
+        this.getContentPane().setBackground(new Color(44,112,213));
+        
+        eliminar();
+        
+        this.TableEstrategias.setModel(estrategias);
+        
+        getEstrategias(se.nombre_servidor);
+        
+        jLabel3.setText("Estrategias del servidor: " + se.nombre_servidor);
     }
 
     /**
@@ -30,15 +62,17 @@ public class MonitorJobs extends javax.swing.JFrame {
 
         jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        TableEstrategias = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Estrategias");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Estrategias del servidor");
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        TableEstrategias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -49,7 +83,7 @@ public class MonitorJobs extends javax.swing.JFrame {
                 "Nombre", "Tipo", "Modo", "Metodo"
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(TableEstrategias);
 
         jButton3.setText("Cerrar");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -96,6 +130,7 @@ public class MonitorJobs extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
@@ -132,11 +167,44 @@ public class MonitorJobs extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void eliminar(){
+        estrategias = (DefaultTableModel) TableEstrategias.getModel();
+        int a = TableEstrategias.getRowCount()-1;
+            for (int i = a; i >= 0; i--) {           
+                estrategias.removeRow(estrategias.getRowCount()-1);
+            }
+    }
+    
+    public static void getEstrategias(String nombre_servidor) {
+        try {
+            // Conexion con base y lanza sql
+            conn = Dao.Enlace(conn);
+            res = Dao.getEstrategiasServidor(res, nombre_servidor);
+            // Obtiene la cantidad de columnas
+            ResultSetMetaData Res_md = res.getMetaData();
+            int cantidad_columnas = Res_md.getColumnCount();
+            // Agrega las columnas necesarias
+            // Ingresa a la tabla las filas 
+            while (res.next()) {
+                Object[] fila = new Object[cantidad_columnas];
+                for (int i = 0; i < cantidad_columnas; i++) {
+                        fila[i] = res.getObject(i+1); // Ingresa valor desde SQL
+                }
+                estrategias.addRow(fila); // Ingresa la fila al table model
+            }
+            res.close();
+            conn.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TableEstrategias;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable3;
     // End of variables declaration//GEN-END:variables
 }
