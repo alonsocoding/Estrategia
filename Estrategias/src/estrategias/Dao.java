@@ -43,6 +43,12 @@ public class Dao {
         return rs;
     }
     
+    public static ResultSet getPeriodo(ResultSet rs, String nombre_periodo) throws SQLException {
+        st = Sta(st);
+        rs = st.executeQuery("select * from Periodo where nombre_periodo = '" + nombre_periodo + "'");
+        return rs;
+    }
+    
     public static ResultSet getEstrategiasServidor(ResultSet rs, String nombre_servidor) throws SQLException {
         st = Sta(st);
         rs = st.executeQuery("select Estrategia.nombre_estrategia, Estrategia.tipo_respaldo, Estrategia.modo_respaldo, Estrategia.metodo_respaldo \n" +

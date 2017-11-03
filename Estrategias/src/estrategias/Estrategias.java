@@ -7,6 +7,8 @@ package estrategias;
 
 import static estrategias.EnviarEstrategia.servidores;
 import java.awt.Color;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -279,8 +281,42 @@ public class Estrategias extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        Periodo pd = new Periodo();
-        pd.setVisible(true);
+        try {
+            selectedRow = TableEstrategias.getSelectedRow();
+            String nombre_periodo = estrategias.getValueAt(selectedRow, 5).toString();
+            // Conexion con base y lanza sql
+            conn = Dao.Enlace(conn);
+            res = Dao.getPeriodo(res, nombre_periodo);
+            // Obtiene la cantidad de columnas
+            ResultSetMetaData Res_md = res.getMetaData();
+            int cantidad_columnas = Res_md.getColumnCount();
+            // Agrega las columnas necesarias
+            // Ingresa a la tabla las filas 
+            Periodos pe = null;
+            while (res.next()) {
+                pe = new Periodos(res.getObject(1).toString(),
+                        res.getObject(2).toString() == "0" ? false : true,
+                        res.getObject(3).toString() == "0" ? false : true,
+                        res.getObject(4).toString() == "0" ? false : true,
+                        res.getObject(5).toString() == "0" ? false : true,
+                        res.getObject(6).toString() == "0" ? false : true,
+                        res.getObject(7).toString() == "0" ? false : true,
+                        res.getObject(8).toString() == "0" ? false : true,
+                        ((BigDecimal) res.getObject(9)).intValue(),
+                        ((BigDecimal) res.getObject(10)).intValue(),
+                        ((BigDecimal) res.getObject(11)).intValue()
+                );
+            }
+            res.close();
+            conn.close();
+
+            Periodo pd = new Periodo(pe);
+            pd.setVisible(true);
+        
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed

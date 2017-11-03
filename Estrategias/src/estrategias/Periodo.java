@@ -5,7 +5,11 @@
  */
 package estrategias;
 
+import static estrategias.EnviarEstrategia.servidores;
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,6 +22,14 @@ public class Periodo extends javax.swing.JFrame {
     /**
      * Creates new form Periodo
      */
+    static Connection conn = null;
+    static Statement sta = null;
+    static ResultSet res = null;
+    static DefaultTableModel servidores = new DefaultTableModel();
+    static int selectedRow;
+    
+    Periodos pe = new Periodos("",false,false,false,false,false,false,false,0,0,0);
+    
     public Periodo() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -33,6 +45,27 @@ public class Periodo extends javax.swing.JFrame {
         dias.addRow(new Object[]{"Domingo", false});
         this.Dias.setModel(dias);
     }
+    
+    public Periodo(Periodos pe) {
+        initComponents();
+        this.setLocationRelativeTo(null);
+        this.getContentPane().setBackground(new Color(44,112,213));
+        
+        MyTableModel dias = new MyTableModel();
+        dias.addRow(new Object[]{"Lunes", pe.lunes});
+        dias.addRow(new Object[]{"Martes", pe.martes});
+        dias.addRow(new Object[]{"Miercoles", pe.miercoles});
+        dias.addRow(new Object[]{"Jueves", pe.jueves});
+        dias.addRow(new Object[]{"Viernes", pe.viernes});
+        dias.addRow(new Object[]{"Sabado", pe.sabado});
+        dias.addRow(new Object[]{"Domingo", pe.domingo});
+        this.Dias.setModel(dias);
+        
+        TextNamePeriodo.setText(pe.nombre_periodo);
+        Hora.setText(pe.hora+"");
+        Minuto.setText(pe.minuto+"");
+        Segundo.setText(pe.segundo+"");
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -44,30 +77,31 @@ public class Periodo extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel13 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        Segundo = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        TextNamePeriodo = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
-        jTextField3 = new javax.swing.JTextField();
+        Hora = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        Minuto = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         Dias = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Periodo");
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Segundos");
 
-        jTextField5.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField5.setText("0");
+        Segundo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        Segundo.setText("0");
 
         jButton1.setText("Cerrar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -94,15 +128,15 @@ public class Periodo extends javax.swing.JFrame {
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Planeacion por Fecha:");
 
-        jTextField3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField3.setText("0");
+        Hora.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        Hora.setText("0");
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Hora");
 
-        jTextField4.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField4.setText("0");
+        Minuto.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        Minuto.setText("0");
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
@@ -133,7 +167,7 @@ public class Periodo extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
                             .addComponent(jLabel9)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TextNamePeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,16 +175,16 @@ public class Periodo extends javax.swing.JFrame {
                             .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(Hora, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel11))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(Minuto, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(Segundo, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -168,7 +202,7 @@ public class Periodo extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(TextNamePeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -185,9 +219,9 @@ public class Periodo extends javax.swing.JFrame {
                             .addComponent(jLabel13))
                         .addGap(8, 8, 8)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(Hora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Minuto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Segundo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -276,6 +310,10 @@ public class Periodo extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Dias;
+    private javax.swing.JTextField Hora;
+    private javax.swing.JTextField Minuto;
+    private javax.swing.JTextField Segundo;
+    private javax.swing.JTextField TextNamePeriodo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel10;
@@ -286,10 +324,6 @@ public class Periodo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     // End of variables declaration//GEN-END:variables
 }
