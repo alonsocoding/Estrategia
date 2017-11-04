@@ -76,3 +76,29 @@ from Servidor, Estrategia, Contiene
 where Servidor.nombre_servidor = Contiene.nombre_servidor
 and Estrategia.nombre_estrategia = Contiene.nombre_estrategia 
 and Servidor.nombre_servidor = 'SE03';
+
+-- Create database link --
+
+CREATE PUBLIC DATABASE LINK DLBD1
+CONNECT TO U1
+IDENTIFIED BY "U1"
+USING 'CBD1';
+
+-- Create database link without tnsname.ora --
+
+CREATE PUBLIC DATABASE LINK DLBD1
+CONNECT TO u1 identified BY "u1"
+USING
+'(DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.0.103)(PORT = 1522))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = XE)
+      (SID = XE)
+    )
+  )'
+/
+
+CREATE DATABASE LINK dl1
+CONNECT TO SYSTEM IDENTIFIED BY root
+USING 'dl1';
