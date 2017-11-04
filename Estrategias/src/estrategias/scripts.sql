@@ -39,6 +39,7 @@ create table Estrategia (
     metodo_respaldo varchar(20),
     objetos varchar(100),
     nombre_periodo varchar(20),
+    activo int,
     constraint pkEstrategia primary key (nombre_estrategia),
     constraint fkEstrategia foreign key (nombre_periodo) references Periodo
 );
@@ -61,9 +62,9 @@ insert into Periodo values('PE01',1,0,1,0,0,0,0,2,30,98);
 insert into Periodo values('PE02',1,0,1,0,0,0,0,2,30,98);
 insert into Periodo values('PE03',1,0,1,0,0,0,0,2,30,98);
 
-insert into Estrategia values('ES01', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE01'); 
-insert into Estrategia values('ES02', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE02'); 
-insert into Estrategia values('ES03', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE03'); 
+insert into Estrategia values('ES01', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE01',1); 
+insert into Estrategia values('ES02', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE02',1); 
+insert into Estrategia values('ES03', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE03',1); 
 
 insert into Contiene values('SE01','ES01');
 insert into Contiene values('SE02','ES02');
