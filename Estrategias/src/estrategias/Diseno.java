@@ -5,8 +5,13 @@
  */
 package estrategias;
 
+import static estrategias.EnviarEstrategia.conn;
 import static estrategias.Estrategias.conn;
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -16,23 +21,21 @@ import javax.swing.table.DefaultTableModel;
  * @author alonso
  */
 public class Diseno extends javax.swing.JFrame {
-    
-    
-    /**
-     * Creates new form Diseno
-     */
+
+    static Connection conn = null;
+    static Statement sta = null;
+    static ResultSet res = null;
+    static DefaultTableModel tablespacesServ = new DefaultTableModel();
+    static int selectedRow;
+
     public Diseno() {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.getContentPane().setBackground(new Color(44,112,213));
-        
+        this.getContentPane().setBackground(new Color(44, 112, 213));
+
         MyTableModel tablespaces = new MyTableModel();
-        tablespaces.addRow(new Object[]{"USERS", false});
-        tablespaces.addRow(new Object[]{"TEMP", false});
-        tablespaces.addRow(new Object[]{"SYSTEM", false});
-        tablespaces.addRow(new Object[]{"INDEX", false});
-        this.Tablespaces.setModel(tablespaces);
-        
+        this.Tablespaces.setModel(getTablespacesServ(tablespaces));
+
         MyTableModel dias = new MyTableModel();
         dias.addRow(new Object[]{"Lunes", false});
         dias.addRow(new Object[]{"Martes", false});
@@ -388,30 +391,58 @@ public class Diseno extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-        String tipo = Frio.isSelected() ? Frio.getText() : Caliente.getText();
-        String modo = Manual.isSelected() ? Manual.getText() : Automatico.getText();
-        String metodo = Archive.isSelected() ? Archive.getText() : NoArchive.getText();
-        String objetos = "";
-        for(int i=0; i<Tablespaces.getRowCount(); i++) {
-            if(Tablespaces.getValueAt(i, 1).toString() == "true")
-                objetos += Tablespaces.getValueAt(i, 0).toString() + ",";
-        }
-        
-        conn = Dao.Enlace(conn);
-        
-        Periodos pe = new Periodos(TextNamePeriodo.getText(),false,false,false,false,false,false,false,0,0,0);
-        Dao.insertPeriodo(pe);
-        Estrategia es = new Estrategia(TextNombreEstrategia.getText(),tipo,modo,metodo,objetos,TextNamePeriodo.getText()); 
-        Dao.insertEstrategia(es);
+            String tipo = Frio.isSelected() ? Frio.getText() : Caliente.getText();
+            String modo = Manual.isSelected() ? Manual.getText() : Automatico.getText();
+            String metodo = Archive.isSelected() ? Archive.getText() : NoArchive.getText();
+            String objetos = "";
+            for (int i = 0; i < Tablespaces.getRowCount(); i++) {
+                if (Tablespaces.getValueAt(i, 1).toString() == "true") {
+                    objetos += Tablespaces.getValueAt(i, 0).toString() + ",";
+                }
+            }
 
-        conn.close();
-        
-        JOptionPane.showMessageDialog(null, "La estrategia se ha registrado correctamente");
+            conn = Dao.Enlace(conn);
+
+            Periodos pe = new Periodos(TextNamePeriodo.getText(), false, false, false, false, false, false, false, 0, 0, 0);
+            Dao.insertPeriodo(pe);
+            Estrategia es = new Estrategia(TextNombreEstrategia.getText(), tipo, modo, metodo, objetos, TextNamePeriodo.getText());
+            Dao.insertEstrategia(es);
+
+            conn.close();
+
+            JOptionPane.showMessageDialog(null, "La estrategia se ha registrado correctamente");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+    public MyTableModel getTablespacesServ(MyTableModel tb) {
+        try {
+            // Conexion con base y lanza sql
+            conn = Dao.Enlace(conn);
+            res = Dao.getServidores(res);
+            // Obtiene la cantidad de columnas
+            ResultSetMetaData Res_md = res.getMetaData();
+            int cantidad_columnas = Res_md.getColumnCount();
+            // Agrega las columnas necesarias
+            // Ingresa a la tabla las filas 
+            while (res.next()) {
+                Object[] fila = new Object[cantidad_columnas];
+                for (int i = 0; i < cantidad_columnas; i++) {
+                    fila[i] = res.getObject(i + 1); // Ingresa valor desde SQL
+                }
+                tb.addRow(fila); // Ingresa la fila al table model
+            }
+            res.close();
+            conn.close();
+            return tb;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
 
     /**
      * @param args the command line arguments
@@ -447,42 +478,45 @@ public class Diseno extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public class MyTableModel extends DefaultTableModel {
 
-    public MyTableModel() {
-      super(new String[]{"Tablespace_name", "Check"}, 0);
-    }
+        public MyTableModel() {
+            super(new String[]{"Tablespace_name", "Check"}, 0);
+        }
 
-    @Override
-    public Class<?> getColumnClass(int columnIndex) {
-      Class clazz = String.class;
-      switch (columnIndex) {
-        case 0:
-          clazz = String.class;
-          break;
-        case 1:
-          clazz = Boolean.class;
-          break;
-      }
-      return clazz;
-    }
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            Class clazz = String.class;
+            switch (columnIndex) {
+                case 0:
+                    clazz = String.class;
+                    break;
+                case 1:
+                    clazz = Boolean.class;
+                    break;
+            }
+            return clazz;
+        }
 
-    @Override
-    public boolean isCellEditable(int row, int column) {
-      return column == 1;
-    }
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return column == 1;
+        }
 
-    @Override
-    public void setValueAt(Object aValue, int row, int column) {
-      if (aValue instanceof Boolean && column == 1) {
-        Vector rowData = (Vector)getDataVector().get(row);
-        rowData.set(1, (boolean)aValue);
-        fireTableCellUpdated(row, column);
-      }
-    }
+        @Override
+        public void setValueAt(Object aValue, int row, int column) {
+            if (aValue instanceof Boolean && column == 1) {
+                Vector rowData = (Vector) getDataVector().get(row);
+                rowData.set(1, (boolean) aValue);
+                fireTableCellUpdated(row, column);
+            }
+        }
 
-  }
+        /**
+         *
+         */
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -526,4 +560,3 @@ public class Diseno extends javax.swing.JFrame {
     private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
     // End of variables declaration//GEN-END:variables
 }
-

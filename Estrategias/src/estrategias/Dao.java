@@ -13,7 +13,7 @@ public class Dao {
     static String bd = "XE";
     static String username = "bases";
     static String password = "bases";
-    static String url = "jdbc:oracle:thin:@alonso-PC:1521:XE";
+    static String url = "jdbc:oracle:thin:@LAPTOP-I8IV3KN9:1522:XE";
 
     public static Connection Enlace(Connection conn) throws SQLException {
         try {
@@ -56,6 +56,11 @@ public class Dao {
                 "where Servidor.nombre_servidor = Contiene.nombre_servidor\n" +
                 "and Estrategia.nombre_estrategia = Contiene.nombre_estrategia \n" +
                 "and Servidor.nombre_servidor = '"+nombre_servidor+"'");
+        return rs;
+    }
+    public static ResultSet getTablespacesServidor(ResultSet rs,String nombre_servidor) throws SQLException {
+        st = Sta(st);
+        rs = st.executeQuery("select tablespace_name from sys.dba_segments@"+ nombre_servidor+" group by tablespace_name");
         return rs;
     }
     
