@@ -13,7 +13,7 @@ public class Dao {
     static String bd = "XE";
     static String username = "bases";
     static String password = "bases";
-    static String url = "jdbc:oracle:thin:@LAPTOP-I8IV3KN9:1522:XE";
+    static String url = "jdbc:oracle:thin:@alonso-PC:1521:XE";
 
     public static Connection Enlace(Connection conn) throws SQLException {
         try {
@@ -83,5 +83,19 @@ public class Dao {
         st.executeQuery("commit");
     }
     
+    public static void createDatabaseLink(String ServerName,String BaseName, String UserName, String Pass, String IP, String port ) throws SQLException {
+        st = Sta(st);
+        st.executeQuery("CREATE PUBLIC DATABASE LINK "+ServerName+"\n" +
+            "CONNECT TO "+UserName+" identified BY \""+Pass+"\"\n" +
+            "USING\n" +
+            "'(DESCRIPTION =\n" +
+            "    (ADDRESS = (PROTOCOL = TCP)(HOST = "+IP+")(PORT = "+port+"))\n" +
+            "    (CONNECT_DATA =\n" +
+            "      (SERVER = DEDICATED)\n" +
+            "      (SERVICE_NAME = "+BaseName+")\n" +
+            "      (SID = XE)\n" +
+            "    )\n" +
+        "  )'");
+    }
     
 }

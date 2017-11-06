@@ -186,6 +186,7 @@ public class Registro extends javax.swing.JFrame {
         
         conn = Dao.Enlace(conn);
         Dao.insertServidor(se);
+        Dao.createDatabaseLink(ServidorText.getText(), BaseText.getText(), UsuarioText.getText() ,ContrasenaText.getText(), IPText.getText(), PuertoText.getText());
         
         conn.close();
 

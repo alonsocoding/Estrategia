@@ -88,10 +88,10 @@ USING 'CBD1';
 -- Create database link without tnsname.ora --
 
 CREATE PUBLIC DATABASE LINK DLBD1
-CONNECT TO u1 identified BY "u1"
+CONNECT TO system identified BY "admin"
 USING
 '(DESCRIPTION =
-    (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.0.103)(PORT = 1522))
+    (ADDRESS = (PROTOCOL = TCP)(HOST = 172.17.30.152)(PORT = 1521))
     (CONNECT_DATA =
       (SERVER = DEDICATED)
       (SERVICE_NAME = XE)
