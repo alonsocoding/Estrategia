@@ -7,6 +7,8 @@ package estrategias;
 
 import static estrategias.Estrategias.conn;
 import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -415,6 +417,7 @@ public class Diseno extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
+            
             String tipo = Frio.isSelected() ? Frio.getText() : Caliente.getText();
             String modo = Manual.isSelected() ? Manual.getText() : Automatico.getText();
             String metodo = Archive.isSelected() ? Archive.getText() : NoArchive.getText();
@@ -435,6 +438,8 @@ public class Diseno extends javax.swing.JFrame {
             
             Dao.insertContiene(se.nombre_servidor, es.nombre_estrategia);
 
+            GuardarArchivos(); // Crea los rcv y bat
+            
             conn.close();
 
             JOptionPane.showMessageDialog(null, "La estrategia se ha registrado correctamente");
@@ -504,6 +509,28 @@ public class Diseno extends javax.swing.JFrame {
                 new Diseno().setVisible(true);
             }
         });
+    }
+    
+    public void GuardarArchivos() {
+         try {
+            // Escritura del archivo BAT
+            String texto = "oli1";
+            FileWriter lector = new FileWriter("./"+TextNombreEstrategia.getText()+".bat");
+            BufferedWriter contenido = new BufferedWriter(lector);
+            contenido.write(texto);
+            contenido.close();
+            
+            // Escritura del archivo RCV
+            String texto2 = "oli2";
+            FileWriter lector2 = new FileWriter("./"+TextNombreEstrategia.getText()+".rcv");
+            BufferedWriter contenido2 = new BufferedWriter(lector);
+            contenido2.write(texto2);
+            contenido2.close();
+            
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public class MyTableModel extends DefaultTableModel {
