@@ -51,11 +51,7 @@ public class Dao {
     
     public static ResultSet getEstrategiasServidor(ResultSet rs, String nombre_servidor) throws SQLException {
         st = Sta(st);
-        rs = st.executeQuery("select Estrategia.nombre_estrategia, Estrategia.tipo_respaldo, Estrategia.modo_respaldo, Estrategia.metodo_respaldo \n" +
-                "from Servidor, Estrategia, Contiene \n" +
-                "where Servidor.nombre_servidor = Contiene.nombre_servidor\n" +
-                "and Estrategia.nombre_estrategia = Contiene.nombre_estrategia \n" +
-                "and Servidor.nombre_servidor = '"+nombre_servidor+"'");
+        rs = st.executeQuery("select * from Estrategia where nombre_servidor = '"+nombre_servidor+"'");
         return rs;
     }
     public static ResultSet getTablespacesServidor(ResultSet rs, String nombre_servidor) throws SQLException {
@@ -72,7 +68,7 @@ public class Dao {
     
     public static void insertEstrategia(Estrategia es) throws SQLException {
         st = Sta(st);
-        st.executeQuery("insert into Estrategia values('"+es.nombre_estrategia+"','"+es.tipo_respaldo+"','"+es.modo_respaldo+"','"+es.metodo_respaldo+"','"+es.objetos+"','"+es.nombre_periodo+"',"+es.activo+")");
+        st.executeQuery("insert into Estrategia values('"+es.nombre_estrategia+"','"+es.tipo_respaldo+"','"+es.modo_respaldo+"','"+es.metodo_respaldo+"','"+es.objetos+"','"+es.nombre_periodo+"',"+es.activo+",'"+es.nombre_servidor+"')");
         st.executeQuery("commit");
     }
     

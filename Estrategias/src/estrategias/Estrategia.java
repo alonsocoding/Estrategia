@@ -17,8 +17,9 @@ public class Estrategia {
     public String objetos;
     public String nombre_periodo;
     public int activo;
+    public String nombre_servidor;
     
-    public Estrategia(String ne, String tr, String mr, String mer, String ob, String np, int act) {
+    public Estrategia(String ne, String tr, String mr, String mer, String ob, String np, int act, String nombre_servidor) {
         this.nombre_estrategia = ne;
         this.tipo_respaldo = tr;
         this.modo_respaldo = mr;
@@ -26,5 +27,6 @@ public class Estrategia {
         this.objetos = ob;
         this.nombre_periodo = np;
         this.activo = act;
+        this.nombre_servidor = nombre_servidor;
     }
 }

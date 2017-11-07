@@ -433,11 +433,9 @@ public class Diseno extends javax.swing.JFrame {
             Periodos pe = new Periodos(TextNamePeriodo.getText(), false, false, false, false, false, false, false, 0, 0, 0);
             Dao.insertPeriodo(pe);
             
-            Estrategia es = new Estrategia(TextNombreEstrategia.getText(), tipo, modo, metodo, objetos, TextNamePeriodo.getText(),0);
+            Estrategia es = new Estrategia(TextNombreEstrategia.getText(), tipo, modo, metodo, objetos, TextNamePeriodo.getText(),0, se.nombre_servidor);
             Dao.insertEstrategia(es);
             
-            Dao.insertContiene(se.nombre_servidor, es.nombre_estrategia);
-
             GuardarArchivos(); // Crea los rcv y bat
             
             conn.close();

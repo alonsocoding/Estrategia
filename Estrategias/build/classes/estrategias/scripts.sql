@@ -43,7 +43,7 @@ create table Estrategia (
     nombre_servidor varchar(20),
     constraint pkEstrategia primary key (nombre_estrategia),
     constraint fkEstrategia foreign key (nombre_periodo) references Periodo,
-     constraint fkContiene foreign key (nombre_servidor) references Servidor
+    constraint fkContiene foreign key (nombre_servidor) references Servidor
 );
 
 
