@@ -27,13 +27,38 @@ public class Diseno extends javax.swing.JFrame {
     static ResultSet res = null;
     static DefaultTableModel tablespacesServ = new DefaultTableModel();
     static int selectedRow;
-
+    
+    Servidor se = new Servidor("","","","","",0);
+    
     public Diseno() {
         initComponents();
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(new Color(44, 112, 213));
 
         MyTableModel tablespaces = new MyTableModel();
+        this.Tablespaces.setModel(getTablespacesServ(tablespaces));
+
+        MyTableModel dias = new MyTableModel();
+        dias.addRow(new Object[]{"Lunes", false});
+        dias.addRow(new Object[]{"Martes", false});
+        dias.addRow(new Object[]{"Miercoles", false});
+        dias.addRow(new Object[]{"Jueves", false});
+        dias.addRow(new Object[]{"Viernes", false});
+        dias.addRow(new Object[]{"Sabado", false});
+        dias.addRow(new Object[]{"Domingo", false});
+        this.Dias.setModel(dias);
+    }
+    
+    public Diseno(Servidor se) {
+        initComponents();
+        this.setLocationRelativeTo(null);
+        this.getContentPane().setBackground(new Color(44, 112, 213));
+
+        this.se = se;
+        System.out.println(se.nombre_servidor);
+        
+        MyTableModel tablespaces = new MyTableModel();
+        
         this.Tablespaces.setModel(getTablespacesServ(tablespaces));
 
         MyTableModel dias = new MyTableModel();
@@ -420,7 +445,7 @@ public class Diseno extends javax.swing.JFrame {
         try {
             // Conexion con base y lanza sql
             conn = Dao.Enlace(conn);
-            res = Dao.getServidores(res);
+            res = Dao.getTablespacesServidor(res, se.nombre_servidor);
             // Obtiene la cantidad de columnas
             ResultSetMetaData Res_md = res.getMetaData();
             int cantidad_columnas = Res_md.getColumnCount();
