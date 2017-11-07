@@ -5,7 +5,6 @@
  */
 package estrategias;
 
-import static estrategias.EnviarEstrategia.conn;
 import static estrategias.Estrategias.conn;
 import java.awt.Color;
 import java.sql.Connection;
@@ -420,18 +419,21 @@ public class Diseno extends javax.swing.JFrame {
             String modo = Manual.isSelected() ? Manual.getText() : Automatico.getText();
             String metodo = Archive.isSelected() ? Archive.getText() : NoArchive.getText();
             String objetos = "";
-            for (int i = 0; i < Tablespaces.getRowCount(); i++) {
+            /*for (int i = 0; i < Tablespaces.getRowCount(); i++) {
                 if (Tablespaces.getValueAt(i, 1).toString() == "true") {
                     objetos += Tablespaces.getValueAt(i, 0).toString() + ",";
                 }
-            }
+            }*/
 
             conn = Dao.Enlace(conn);
-
+            
             Periodos pe = new Periodos(TextNamePeriodo.getText(), false, false, false, false, false, false, false, 0, 0, 0);
             Dao.insertPeriodo(pe);
-            Estrategia es = new Estrategia(TextNombreEstrategia.getText(), tipo, modo, metodo, objetos, TextNamePeriodo.getText());
+            
+            Estrategia es = new Estrategia(TextNombreEstrategia.getText(), tipo, modo, metodo, objetos, TextNamePeriodo.getText(),0);
             Dao.insertEstrategia(es);
+            
+            Dao.insertContiene(se.nombre_servidor, es.nombre_estrategia);
 
             conn.close();
 

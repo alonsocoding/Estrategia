@@ -5,7 +5,8 @@
  */
 package estrategias;
 
-import static estrategias.EnviarEstrategia.servidores;
+import static estrategias.MonitorJobs.conn;
+import static estrategias.MonitorJobs.estrategias;
 import java.awt.Color;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -46,14 +47,14 @@ public class Estrategias extends javax.swing.JFrame {
         servidores.addColumn("Puerto");
         getServidores();
         
-        this.TableEstrategias.setModel(estrategias);
+        /*this.TableEstrategias.setModel(estrategias);
         estrategias.addColumn("Nombre");
         estrategias.addColumn("Tipo");
         estrategias.addColumn("Modo");
         estrategias.addColumn("Metodo");
         estrategias.addColumn("Objetos");
         estrategias.addColumn("Periodo");
-        getEstrategias();
+        getEstrategias();*/
     }
 
     /**
@@ -76,9 +77,12 @@ public class Estrategias extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         TableEstrategias = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -112,6 +116,11 @@ public class Estrategias extends javax.swing.JFrame {
                 "Nombre de Servidor", "Nombre de Usuario", "Nombre de Base", "IP"
             }
         ));
+        TableServidores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableServidoresMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(TableServidores);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -149,14 +158,7 @@ public class Estrategias extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setText("Estrategias");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-
-        jButton4.setText("Periodo");
+        jButton4.setLabel("Actualizar Estrategia");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -170,39 +172,70 @@ public class Estrategias extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setText("Eliminar Estrategia");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton7.setText("Actualizar Servidor");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jButton8.setText("Eliminar Servidor");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
+        jButton9.setText("Logs");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jButton1)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jButton2)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))))
+                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2))
+                        .addGap(0, 525, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton7)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton8))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton2)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton4)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton5)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton9)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,14 +251,18 @@ public class Estrategias extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(83, Short.MAX_VALUE))
         );
 
@@ -249,19 +286,6 @@ public class Estrategias extends javax.swing.JFrame {
         Diseno di = new Diseno(se);
         di.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        selectedRow = TableServidores.getSelectedRow();
-        Servidor se = new Servidor(servidores.getValueAt(selectedRow, 0).toString(),
-                servidores.getValueAt(selectedRow, 1).toString(),
-                servidores.getValueAt(selectedRow, 2).toString(),
-                servidores.getValueAt(selectedRow, 3).toString(),
-                servidores.getValueAt(selectedRow, 4).toString(), 
-                3000);
-        
-        MonitorJobs mj = new MonitorJobs(se);
-        mj.setVisible(true);
-    }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try {
@@ -305,8 +329,60 @@ public class Estrategias extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         eliminar();
         getServidores();
-        getEstrategias();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void TableServidoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableServidoresMouseClicked
+        /*Hay que mostrar en la tabla estrategias la estrategia del servidor que la selecciono*/
+        
+        eliminarEstrategias();
+        
+        selectedRow = TableServidores.getSelectedRow();
+        Servidor se = new Servidor(servidores.getValueAt(selectedRow, 0).toString(),
+                servidores.getValueAt(selectedRow, 1).toString(),
+                servidores.getValueAt(selectedRow, 2).toString(),
+                servidores.getValueAt(selectedRow, 3).toString(),
+                servidores.getValueAt(selectedRow, 4).toString(), 
+                3000);
+        try {
+            // Conexion con base y lanza sql
+            conn = Dao.Enlace(conn);
+            res = Dao.getEstrategiasServidor(res, se.nombre_servidor);
+            // Obtiene la cantidad de columnas
+            ResultSetMetaData Res_md = res.getMetaData();
+            int cantidad_columnas = Res_md.getColumnCount();
+            // Agrega las columnas necesarias
+            // Ingresa a la tabla las filas 
+            while (res.next()) {
+                Object[] fila = new Object[cantidad_columnas];
+                for (int i = 0; i < cantidad_columnas; i++) {
+                        fila[i] = res.getObject(i+1); // Ingresa valor desde SQL
+                }
+                estrategias.addRow(fila); // Ingresa la fila al table model
+            }
+            res.close();
+            conn.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+    }//GEN-LAST:event_TableServidoresMouseClicked
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -352,6 +428,14 @@ public class Estrategias extends javax.swing.JFrame {
         estrategias = (DefaultTableModel) TableEstrategias.getModel();
         int b = TableEstrategias.getRowCount()-1;
             for (int i = b; i >= 0; i--) {           
+                estrategias.removeRow(estrategias.getRowCount()-1);
+            }
+    }
+    
+    public void eliminarEstrategias(){
+        estrategias = (DefaultTableModel) TableEstrategias.getModel();
+        int a = TableEstrategias.getRowCount()-1;
+            for (int i = a; i >= 0; i--) {           
                 estrategias.removeRow(estrategias.getRowCount()-1);
             }
     }
@@ -408,6 +492,31 @@ public class Estrategias extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+    
+    public static void getEstrategias(String nombre_servidor) {
+        try {
+            // Conexion con base y lanza sql
+            conn = Dao.Enlace(conn);
+            res = Dao.getEstrategiasServidor(res, nombre_servidor);
+            // Obtiene la cantidad de columnas
+            ResultSetMetaData Res_md = res.getMetaData();
+            int cantidad_columnas = Res_md.getColumnCount();
+            // Agrega las columnas necesarias
+            // Ingresa a la tabla las filas 
+            while (res.next()) {
+                Object[] fila = new Object[cantidad_columnas];
+                for (int i = 0; i < cantidad_columnas; i++) {
+                        fila[i] = res.getObject(i+1); // Ingresa valor desde SQL
+                }
+                estrategias.addRow(fila); // Ingresa la fila al table model
+            }
+            res.close();
+            conn.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TableEstrategias;
@@ -417,6 +526,9 @@ public class Estrategias extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -72,7 +72,7 @@ public class Dao {
     
     public static void insertEstrategia(Estrategia es) throws SQLException {
         st = Sta(st);
-        st.executeQuery("insert into Estrategia values('"+es.nombre_estrategia+"','"+es.tipo_respaldo+"','"+es.modo_respaldo+"','"+es.metodo_respaldo+"','"+es.objetos+"','"+es.nombre_periodo+"')");
+        st.executeQuery("insert into Estrategia values('"+es.nombre_estrategia+"','"+es.tipo_respaldo+"','"+es.modo_respaldo+"','"+es.metodo_respaldo+"','"+es.objetos+"','"+es.nombre_periodo+"',"+es.activo+")");
         st.executeQuery("commit");
     }
     
