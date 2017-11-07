@@ -40,17 +40,14 @@ create table Estrategia (
     objetos varchar(100),
     nombre_periodo varchar(20),
     activo int,
+    nombre_servidor varchar(20),
     constraint pkEstrategia primary key (nombre_estrategia),
-    constraint fkEstrategia foreign key (nombre_periodo) references Periodo
+    constraint fkEstrategia foreign key (nombre_periodo) references Periodo,
+     constraint fkContiene foreign key (nombre_servidor) references Servidor
 );
 
-create table Contiene (
-    nombre_servidor varchar(20),
-    nombre_estrategia varchar(20),
-    constraint pkContiene primary key (nombre_servidor, nombre_estrategia),
-    constraint fkContiene foreign key (nombre_servidor) references Servidor,
-    constraint fkContiene2 foreign key (nombre_estrategia) references Estrategia
-);
+
+
 
 -- Pruebas --
 
@@ -62,15 +59,59 @@ insert into Periodo values('PE01',1,0,1,0,0,0,0,2,30,98);
 insert into Periodo values('PE02',1,0,1,0,0,0,0,2,30,98);
 insert into Periodo values('PE03',1,0,1,0,0,0,0,2,30,98);
 
-insert into Estrategia values('ES01', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE01',1); 
-insert into Estrategia values('ES02', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE02',1); 
-insert into Estrategia values('ES03', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE03',1); 
+insert into Estrategia values('ES01', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE01',1,'SE01'); 
+insert into Estrategia values('ES02', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE02',1,'SE02'); 
+insert into Estrategia values('ES03', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE03',1,'SE03'); 
+insert into Estrategia values('ES04', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE03',1,'SE01'); 
+-----------------------------------------------------------------------------------------------
+--------------------------------------PROCEDIMIENTOS-------------------------------------------
 
-insert into Contiene values('SE01','ES01');
-insert into Contiene values('SE02','ES02');
-insert into Contiene values('SE03','ES03');
+--Procedimiento para eliminar un servidor
+create or replace procedure e1(nombreServ varchar)
+	is
+	nombre varchar2(20);
+	Cursor c1 is 
+		select nombre_servidor from Servidor where nombre_servidor = nombreServ;
+	begin
+		open c1;
+		fetch c1 into nombre;
+        if c1%found then
+            e2(nombre); --Para elimnar estrategia hay que usar el metodo de david, pero con el nombre _servidor
+            delete from servidor where nombre_servidor = nombre;
+        end if;
+    end;
+/
+--Procedimiento para eliminar estrategia. (cuando se eliminar servidor)
+create or replace procedure e2(nombreServ varchar)
+	is
+    nombreEst varchar2(20);
+    Cursor c1 is 
+		select nombre_estrategia from estrategia where nombre_servidor = nombreServ;
+	begin
+        open c1;
+		fetch c1 into nombreEst;
+		delete from estrategia where nombre_servidor = nombreServ;
+        sp_dropJob(nombreEst); 
+    end;
+/
+--Procedimiento para eliminar estrategia. (Eliminando solo la estrategia).
+create or replace procedure e2(nombre varchar)
+	is
+	begin
+		delete from estrategia where nombre_estrategia = nombre;
+        sp_dropJob(nombre); 
+    end;
+/
+--Procedmiento para elimnar la estrategia.
+create or replace procedure sp_dropJob(name varchar)
+is
+begin 
+    dbms_scheduler.drop_job ( 
+        job_name    => name); 
+end; 
+/
 
--- Select de multiples tablas --
+-------------------------------------------------------------------------------------------------------
 
 select Servidor.nombre_servidor, Estrategia.nombre_estrategia 
 from Servidor, Estrategia, Contiene 
