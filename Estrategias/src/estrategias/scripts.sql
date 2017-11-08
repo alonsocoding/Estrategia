@@ -102,13 +102,60 @@ create or replace procedure e2(nombre varchar)
         sp_dropJob(nombre); 
     end;
 /
---Procedmiento para elimnar la estrategia.
-create or replace procedure sp_dropJob(name varchar)
+--Procedmiento para elimnar el job de la estrategia.
+create or replace procedure sp_dropJob(estrategia varchar)
 is
 begin 
     dbms_scheduler.drop_job ( 
-        job_name    => name); 
+        job_name    => estrategia);
+    commit;
 end; 
+/
+
+
+-- Procedimiento para crear el job de la estrategia.
+create or replace procedure sp_createJob(estrategia varchar, ruta varchar, frecuencia varchar, inicio timestamp)
+is
+begin    
+    dbms_scheduler.create_job( 
+        job_name        => estrategia, 
+        job_type        => 'EXECUTABLE', 
+        job_action      => ruta, 
+        start_date      => inicio, 
+        repeat_interval => 'FREQ=WEEKLY;'+frecuencia, 
+        enabled         => false, 
+        comments        => 'Backup database using RMAN'); 
+    dbms_scheduler.run_job(job_name=>estrategia,USE_CURRENT_SESSION=>true);
+    commit;
+end;
+/
+
+--Procedimiento que actualiza la frecuencia de la estrategia
+create or replace procedure alterJob(estrategia varchar, frecuencia varchar)
+is
+BEGIN
+DBMS_SCHEDULER.SET_ATTRIBUTE (estrategia,
+   'repeat_interval', 'FREQ=WEEKLY;'+frecuencia);
+commit;   
+END;
+/
+
+--Procedimiento para deshabilitar un job
+create or replace procedure deshabilitarJob(estrategia varchar)
+is
+BEGIN 
+  DBMS_SCHEDULER.DISABLE(estrategia);
+  commit;
+END;
+/
+
+--Procedimiento para habilitar un job
+create or replace procedure habilitarJob(estrategia varchar)
+is
+BEGIN 
+  DBMS_SCHEDULER.ENABLE(estrategia);
+  commit;
+END;
 /
 
 -------------------------------------------------------------------------------------------------------
