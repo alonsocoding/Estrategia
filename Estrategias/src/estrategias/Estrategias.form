@@ -65,7 +65,7 @@
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="525" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="553" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -149,11 +149,12 @@
         <Component class="javax.swing.JTable" name="TableServidores">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="4">
+              <Table columnCount="5" rowCount="4">
                 <Column editable="true" title="Nombre de Servidor" type="java.lang.Object"/>
                 <Column editable="true" title="Nombre de Usuario" type="java.lang.Object"/>
                 <Column editable="true" title="Nombre de Base" type="java.lang.Object"/>
                 <Column editable="true" title="IP" type="java.lang.Object"/>
+                <Column editable="true" title="Puerto" type="java.lang.Object"/>
               </Table>
             </Property>
           </Properties>

@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -107,13 +108,13 @@ public class Estrategias extends javax.swing.JFrame {
 
         TableServidores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Nombre de Servidor", "Nombre de Usuario", "Nombre de Base", "IP"
+                "Nombre de Servidor", "Nombre de Usuario", "Nombre de Base", "IP", "Puerto"
             }
         ));
         TableServidores.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -217,7 +218,7 @@ public class Estrategias extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2))
-                        .addGap(0, 525, Short.MAX_VALUE))
+                        .addGap(0, 553, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -299,6 +300,8 @@ public class Estrategias extends javax.swing.JFrame {
             int cantidad_columnas = Res_md.getColumnCount();
             // Agrega las columnas necesarias
             // Ingresa a la tabla las filas 
+            Estrategia es = new Estrategia("","","","","","",0,"");
+            
             Periodos pe = null;
             while (res.next()) {
                 pe = new Periodos(res.getObject(1).toString(),
@@ -317,7 +320,7 @@ public class Estrategias extends javax.swing.JFrame {
             res.close();
             conn.close();
 
-            Periodo pd = new Periodo(pe);
+            Periodo pd = new Periodo(es, pe);
             pd.setVisible(true);
         
         } catch (Exception e) {
@@ -342,7 +345,7 @@ public class Estrategias extends javax.swing.JFrame {
                 servidores.getValueAt(selectedRow, 2).toString(),
                 servidores.getValueAt(selectedRow, 3).toString(),
                 servidores.getValueAt(selectedRow, 4).toString(), 
-                3000);
+                Integer.parseInt(servidores.getValueAt(selectedRow, 5).toString()));
         try {
             // Conexion con base y lanza sql
             conn = Dao.Enlace(conn);
@@ -361,44 +364,52 @@ public class Estrategias extends javax.swing.JFrame {
             }
             res.close();
             conn.close();
-
+            
+          
         } catch (Exception e) {
             e.printStackTrace();
         }
         
     }//GEN-LAST:event_TableServidoresMouseClicked
-    //Eliminar Estrategia.
+
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // ACTUALIZAR SERVIDOR
+        
+        selectedRow = TableServidores.getSelectedRow();
+        Servidor se = new Servidor(servidores.getValueAt(selectedRow, 0).toString(),
+                servidores.getValueAt(selectedRow, 1).toString(),
+                servidores.getValueAt(selectedRow, 2).toString(),
+                servidores.getValueAt(selectedRow, 3).toString(),
+                servidores.getValueAt(selectedRow, 4).toString(), 
+                Integer.parseInt(servidores.getValueAt(selectedRow, 5).toString()));
+        
+        MonitorJobs mj = new MonitorJobs(se);
+        mj.setVisible(true);
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // ELIMINAR UN SERVIDOR
+        selectedRow = TableServidores.getSelectedRow();
+        String nombre_servidor = servidores.getValueAt(selectedRow, 0).toString();
+        
         try {
-            selectedRow = TableEstrategias.getSelectedRow();
-             if(selectedRow != -1){
-            String nombre_estrategia = estrategias.getValueAt(selectedRow, 0).toString();
             // Conexion con base y lanza sql
             conn = Dao.Enlace(conn);
-            Dao.elimnarEstrategia(nombre_estrategia);
-            conn.close();}
+            Dao.deleteServidor(nombre_servidor);
+            
+            res.close();
+            conn.close();
+            
+            JOptionPane.showMessageDialog(null, "La servidor se ha eliminado correctamente");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
-    //Eliminar Servidor :D
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-           try {
-            selectedRow = TableServidores.getSelectedRow();
-            if(selectedRow != -1){
-            String nombre_servidor = servidores.getValueAt(selectedRow, 0).toString();
-            // Conexion con base y lanza sql
-            conn = Dao.Enlace(conn);
-            Dao.eliminarServidor(nombre_servidor);
-            conn.close();}
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
