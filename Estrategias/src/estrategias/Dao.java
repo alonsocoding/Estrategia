@@ -113,4 +113,39 @@ public class Dao {
         "  )'");
     }
     
+    
+     public static void createJob(String nombre_estrategia, String ruta, String frecuencia, Timestamp inicio) throws SQLException {
+         st = Sta(st);
+         st.executeQuery("exec sp_createJob('" + nombre_estrategia + "', '" + ruta + "', '" + frecuencia + "', '" + inicio + "')");
+     }
+ 
+     public static void dropJob(String nombre_estrategia) throws SQLException {
+         st = Sta(st);
+         st.executeQuery("exec sp_dropJob('" + nombre_estrategia + "')");
+     }
+     
+     public static void alterJob(String nombre_estrategia, String frecuencia) throws SQLException {
+         st = Sta(st);
+         st.executeQuery("exec alterJob('" + nombre_estrategia + "', '" + frecuencia + "')");
+     }
+     
+     public static void deshabilitar(String nombre_estrategia) throws SQLException {
+         st = Sta(st);
+         st.executeQuery("exec deshabilitarJob('" + nombre_estrategia + "')");
+     }
+     
+     public static void habilitar(String nombre_estrategia) throws SQLException {
+          st = Sta(st);
+          st.executeQuery("exec habilitarJob('" + nombre_estrategia + "')");
+      }
+ 
+     public static void eliminarServidor(String nombre_servidor) throws SQLException {
+         st = Sta(st);
+         st.executeQuery("exec eliminarServidor('" + nombre_servidor + "')");
+      }
+     public static void elimnarEstrategia(String nombre_estrategia) throws SQLException {
+         st = Sta(st);
+         st.executeQuery("exec eliminarEstrategia('" + nombre_estrategia + "')");
+      }
+    
 }

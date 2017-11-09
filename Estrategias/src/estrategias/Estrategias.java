@@ -300,8 +300,17 @@ public class Estrategias extends javax.swing.JFrame {
             int cantidad_columnas = Res_md.getColumnCount();
             // Agrega las columnas necesarias
             // Ingresa a la tabla las filas 
-            Estrategia es = new Estrategia("","","","","","",0,"");
-            
+
+            Estrategia es = new Estrategia(estrategias.getValueAt(selectedRow, 0).toString(),
+                    estrategias.getValueAt(selectedRow, 1).toString(),
+                    estrategias.getValueAt(selectedRow, 2).toString(),
+                    estrategias.getValueAt(selectedRow, 3).toString(),
+                    "algo",
+                    estrategias.getValueAt(selectedRow, 5).toString(),
+                    0,
+                    "algo");
+
+
             Periodos pe = null;
             while (res.next()) {
                 pe = new Periodos(res.getObject(1).toString(),
@@ -319,7 +328,7 @@ public class Estrategias extends javax.swing.JFrame {
             }
             res.close();
             conn.close();
-
+            
             Periodo pd = new Periodo(es, pe);
             pd.setVisible(true);
         
