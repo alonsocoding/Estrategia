@@ -382,7 +382,23 @@ public class Estrategias extends javax.swing.JFrame {
     }//GEN-LAST:event_TableServidoresMouseClicked
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        // ELIMINAR UN SERVIDOR
+        selectedRow = TableEstrategias.getSelectedRow();
+        String nombre_estrategia = estrategias.getValueAt(selectedRow, 0).toString();
+        
+        try {
+            // Conexion con base y lanza sql
+            conn = Dao.Enlace(conn);
+            Dao.deleteEstrategia(nombre_estrategia);
+            
+            res.close();
+            conn.close();
+            
+            JOptionPane.showMessageDialog(null, "La estrategia se ha eliminado correctamente");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -413,7 +429,7 @@ public class Estrategias extends javax.swing.JFrame {
             res.close();
             conn.close();
             
-            JOptionPane.showMessageDialog(null, "La servidor se ha eliminado correctamente");
+            JOptionPane.showMessageDialog(null, "El servidor se ha eliminado correctamente");
 
         } catch (Exception e) {
             e.printStackTrace();
