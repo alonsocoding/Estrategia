@@ -78,7 +78,6 @@ public class MonitorJobs extends javax.swing.JFrame {
         ContrasenaText = new javax.swing.JTextField();
         IPText = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Estrategias");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N

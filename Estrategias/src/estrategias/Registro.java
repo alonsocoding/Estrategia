@@ -50,7 +50,6 @@ public class Registro extends javax.swing.JFrame {
         ServidorText = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registro de Servidores");
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));

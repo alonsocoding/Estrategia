@@ -142,7 +142,6 @@ public class Periodo extends javax.swing.JFrame {
         Archive = new javax.swing.JRadioButton();
         jLabel14 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Periodo");
 
         NoArchive.setForeground(new java.awt.Color(255, 255, 255));

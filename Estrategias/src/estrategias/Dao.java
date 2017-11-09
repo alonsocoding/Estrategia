@@ -13,7 +13,7 @@ public class Dao {
     static String bd = "XE";
     static String username = "bases";
     static String password = "bases";
-    static String url = "jdbc:oracle:thin:@Josema:1521:XE";
+    static String url = "jdbc:oracle:thin:@alonso-PC:1521:XE";
 
     public static Connection Enlace(Connection conn) throws SQLException {
         try {
@@ -89,7 +89,7 @@ public class Dao {
       public static void deleteEstrategia(String nombre_estrategia) throws SQLException {
         st = Sta(st);
         st.executeQuery("delete from Estrategia where nombre_estrategia = '"+nombre_estrategia+"'");
-        st.executeQuery("dbms_scheduler.drop_job ( job_name    =>'"+nombre_estrategia+"');");
+        //st.executeQuery("dbms_scheduler.drop_job ( job_name    =>'"+nombre_estrategia+"');");
         st.executeQuery("commit");
     }
     

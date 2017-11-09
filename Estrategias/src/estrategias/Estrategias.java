@@ -218,7 +218,7 @@ public class Estrategias extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2))
-                        .addGap(0, 553, Short.MAX_VALUE))
+                        .addGap(0, 559, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -234,8 +234,9 @@ public class Estrategias extends javax.swing.JFrame {
                                 .addComponent(jButton4)
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton5)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton9)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton9)
+                                .addGap(6, 6, 6)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -438,7 +439,16 @@ public class Estrategias extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
+        /*Estrategia es = new Estrategia(estrategias.getValueAt(selectedRow, 0).toString(),
+                    estrategias.getValueAt(selectedRow, 1).toString(),
+                    estrategias.getValueAt(selectedRow, 2).toString(),
+                    estrategias.getValueAt(selectedRow, 3).toString(),
+                    "algo",
+                    estrategias.getValueAt(selectedRow, 5).toString(),
+                    0,
+                    "algo");*/
+        Logs lg = new Logs();
+        lg.setVisible(true);
     }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
