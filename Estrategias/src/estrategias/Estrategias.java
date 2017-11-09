@@ -371,11 +371,12 @@ public class Estrategias extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         try {
             selectedRow = TableEstrategias.getSelectedRow();
+             if(selectedRow != -1){
             String nombre_estrategia = estrategias.getValueAt(selectedRow, 0).toString();
             // Conexion con base y lanza sql
             conn = Dao.Enlace(conn);
             Dao.elimnarEstrategia(nombre_estrategia);
-            conn.close();
+            conn.close();}
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -389,11 +390,12 @@ public class Estrategias extends javax.swing.JFrame {
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
            try {
             selectedRow = TableServidores.getSelectedRow();
+            if(selectedRow != -1){
             String nombre_servidor = servidores.getValueAt(selectedRow, 0).toString();
             // Conexion con base y lanza sql
             conn = Dao.Enlace(conn);
             Dao.eliminarServidor(nombre_servidor);
-            conn.close();
+            conn.close();}
         } catch (Exception e) {
             e.printStackTrace();
         }
