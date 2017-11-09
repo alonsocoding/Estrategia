@@ -67,7 +67,7 @@ insert into Estrategia values('ES04', 'Frio', 'Manual', 'Archive', 'USERS, TEMP'
 --------------------------------------PROCEDIMIENTOS-------------------------------------------
 
 --Procedimiento para eliminar un servidor
-create or replace procedure e1(nombreServ varchar)
+create or replace procedure eliminarServidor(nombreServ varchar)
 	is
 	nombre varchar2(20);
 	Cursor c1 is 
@@ -76,13 +76,13 @@ create or replace procedure e1(nombreServ varchar)
 		open c1;
 		fetch c1 into nombre;
         if c1%found then
-            e2(nombre); --Para elimnar estrategia hay que usar el metodo de david, pero con el nombre _servidor
+            eliminarServidor2(nombre); --Para elimnar estrategia hay que usar el metodo de david, pero con el nombre _servidor
             delete from servidor where nombre_servidor = nombre;
         end if;
     end;
 /
 --Procedimiento para eliminar estrategia. (cuando se eliminar servidor)
-create or replace procedure e2(nombreServ varchar)
+create or replace procedure eliminarServidor2(nombreServ varchar)
 	is
     nombreEst varchar2(20);
     Cursor c1 is 
@@ -95,7 +95,7 @@ create or replace procedure e2(nombreServ varchar)
     end;
 /
 --Procedimiento para eliminar estrategia. (Eliminando solo la estrategia).
-create or replace procedure e2(nombre varchar)
+create or replace procedure eliminarEstrategia(nombre varchar)
 	is
 	begin
 		delete from estrategia where nombre_estrategia = nombre;

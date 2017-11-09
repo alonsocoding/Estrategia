@@ -13,7 +13,7 @@ public class Dao {
     static String bd = "XE";
     static String username = "bases";
     static String password = "bases";
-    static String url = "jdbc:oracle:thin:@alonso-PC:1521:XE";
+    static String url = "jdbc:oracle:thin:@Josema:1521:XE";
 
     public static Connection Enlace(Connection conn) throws SQLException {
         try {
@@ -124,5 +124,12 @@ public class Dao {
         st = Sta(st);
         st.executeQuery("exec habilitarJob('" + nombre_estrategia + "')");
     }
-
+    public static void eliminarServidor(String nombre_servidor) throws SQLException {
+        st = Sta(st);
+        st.executeQuery("exec eliminarServidor('" + nombre_servidor + "')");
+    }
+    public static void elimnarEstrategia(String nombre_estrategia) throws SQLException {
+        st = Sta(st);
+        st.executeQuery("exec eliminarEstrategia('" + nombre_estrategia + "')");
+    }
 }
