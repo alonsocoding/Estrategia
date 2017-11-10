@@ -13,7 +13,7 @@ public class Dao {
     static String bd = "XE";
     static String username = "bases";
     static String password = "bases";
-    static String url = "jdbc:oracle:thin:@alonso-PC:1521:XE";
+    static String url = "jdbc:oracle:thin:@Josema:1521:XE";
 
     public static Connection Enlace(Connection conn) throws SQLException {
         try {
@@ -154,7 +154,10 @@ public class Dao {
 
     public static void eliminarServidor(String nombre_servidor) throws SQLException {
         CallableStatement cst = conn.prepareCall("{call eliminarServidor('" + nombre_servidor + "')}");
+        st = Sta(st);
+        st.executeQuery("drop public database link "+nombre_servidor);
         cst.execute();
+        st.executeQuery("commit");
     }
 
     public static void elimnarEstrategia(String nombre_estrategia) throws SQLException {
