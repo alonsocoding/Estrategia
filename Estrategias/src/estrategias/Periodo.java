@@ -5,10 +5,14 @@
  */
 package estrategias;
 
+import static estrategias.Diseno.conn;
 import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -29,6 +33,7 @@ public class Periodo extends javax.swing.JFrame {
     static int selectedRow;
     
     Estrategia es = new Estrategia("","","","","","",0,"");
+    Servidor se = new Servidor("", "", "", "", "", 0);
     Periodos pe = new Periodos("",false,false,false,false,false,false,false,0,0,0);
     
     public Periodo() {
@@ -192,6 +197,9 @@ public class Periodo extends javax.swing.JFrame {
 
         Minuto.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         Minuto.setText("0");
+
+        TextNombreEstrategia.setEditable(false);
+        TextNombreEstrategia.setBackground(new java.awt.Color(153, 153, 153));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
@@ -442,23 +450,38 @@ public class Periodo extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-
+            //Eliminar primero
+             conn = Dao.Enlace(conn);
+             Dao.elimnarEstrategia(TextNombreEstrategia.getText());
+            //Crear------------
             String tipo = Frio.isSelected() ? Frio.getText() : Caliente.getText();
             String modo = Manual.isSelected() ? Manual.getText() : Automatico.getText();
             String metodo = Archive.isSelected() ? Archive.getText() : NoArchive.getText();
             String objetos = "";
-            /*for (int i = 0; i < Tablespaces.getRowCount(); i++) {
-                if (Tablespaces.getValueAt(i, 1).toString() == "true") {
+            for (int i = 0; i < Tablespaces.getRowCount(); i++) {
+                if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
                     objetos += Tablespaces.getValueAt(i, 0).toString() + ",";
                 }
-            }*/
+            }
 
-            conn = Dao.Enlace(conn);
+           
 
+            Periodos pe = new Periodos(TextNamePeriodo.getText(), false, false, false, false, false, false, false, 0, 0, 0);
+            Dao.insertPeriodo(pe);
+
+            Estrategia es = new Estrategia(TextNombreEstrategia.getText(), tipo, modo, metodo, objetos, TextNamePeriodo.getText(), 0, se.nombre_servidor);
+            Dao.insertEstrategia(es);
+
+            GuardarArchivosBat(); // Crea los rcv y bat
+            GuardarArchivosRCV(es); // Crea los rcv y bat
+            Timestamp s = new Timestamp(System.currentTimeMillis());
+            if ("Automatico".equals(modo)) {
+                Dao.createJob2(es.nombre_estrategia, "C:\\Users\\alonso\\Desktop\\Estrategia\\Estrategias\\rman\\ES9S.bat", "BYHOUR=4;BYMINUTE=1", s);
+            }
 
             conn.close();
 
-            JOptionPane.showMessageDialog(null, "La estrategia se ha registrado correctamente");
+            JOptionPane.showMessageDialog(null, "La estrategia se ha actualizado correctamente");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -542,6 +565,207 @@ public class Periodo extends javax.swing.JFrame {
     }
 
   }
+ public void GuardarArchivosBat() {
+        try {
+            // Escritura del archivo BAT
+            String texto = "set ORACLE_HOME=C:\\Oracle\\product\\11.2.0\\server\n"
+                    + "set ORACLE_SID=XE \n"
+                    + "set NLS_DATE_FORMAT=\"YYYY-MON-DD HH24:MI:SS\"\n"
+                    + "\n"
+                    + "%ORACLE_HOME%\\bin\\rman target / log = ./logs/" + TextNombreEstrategia.getText() + ".log cmdfile ./rman/" + TextNombreEstrategia.getText() + ".rcv\n"
+                    + "\n"
+                    + "exit 0";
+            FileWriter lector = new FileWriter("./rman/" + TextNombreEstrategia.getText() + ".bat");
+            BufferedWriter contenido = new BufferedWriter(lector);
+            contenido.write(texto);
+            contenido.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void GuardarArchivosRCV(Estrategia es) {
+        if ("Frio".equals(es.tipo_respaldo)) {
+            if ("Archive".equals(es.modo_respaldo)) {
+                if (jCheckBox1.isSelected()) {
+                    try {
+                        // Escritura del archivo RCV
+                        String texto2 = "connect target sys/root@\"+this.se.ip+\";\n"
+                                + "shutdown\n"
+                                + "startup mount\n"
+                                + "spool log to \"./logs/MyLog.log\"\n"
+                                + "BACKUP DATABASE SPFILE PLUS ARCHIVELOG;\n"
+                                + "alter database open resetlogs;\n"
+                                + "spool log off";
+                        FileWriter lector2 = new FileWriter("./rman/" + TextNombreEstrategia.getText() + ".rcv");
+                        BufferedWriter contenido2 = new BufferedWriter(lector2);
+                        contenido2.write(texto2);
+                        contenido2.close();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        String contenido = "";
+                        for (int i = 0; i < this.Tablespaces.getRowCount(); i++) {
+                            if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
+                                contenido += "BACKUP TABLESPACE" + Tablespaces.getValueAt(i, 0).toString() + "PLUS ARCHIVELOG; \n";
+                            }
+                        }
+                        if ("".equals(contenido)) {
+                            String texto = "connect target sys/root@\"+this.se.ip+\";\n"
+                                    + "shutdown\n"
+                                    + "startup mount\n"
+                                    + "spool log to \"./logs/MyLog.log\"\n"
+                                    + contenido
+                                    + "alter database open resetlogs;\n"
+                                    + "spool log off";
+
+                            FileWriter lector2 = new FileWriter("./rman/" + TextNombreEstrategia.getText() + ".rcv");
+                            BufferedWriter contenido2 = new BufferedWriter(lector2);
+                            contenido2.write(texto);
+                            contenido2.close();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if ("No Archive".equals(es.modo_respaldo)) {
+                if (jCheckBox1.isSelected()) {
+                    try {
+
+                        // Escritura del archivo RCV
+                        String texto2 = "connect target sys/root@\"+this.se.ip+\";\n"
+                                + "shutdown\n"
+                                + "startup mount\n"
+                                + "spool log to \"./logs/MyLog.log\"\n"
+                                + "BACKUP DATABASE;\n"
+                                + "alter database open resetlogs;\n"
+                                + "spool log off";
+                        FileWriter lector2 = new FileWriter("./rman/" + TextNombreEstrategia.getText() + ".rcv");
+                        BufferedWriter contenido2 = new BufferedWriter(lector2);
+                        contenido2.write(texto2);
+                        contenido2.close();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        String contenido = "";
+                        for (int i = 0; i < this.Tablespaces.getRowCount(); i++) {
+                            if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
+                                contenido += "BACKUP TABLESPACE" + Tablespaces.getValueAt(i, 0).toString() + "PLUS ARCHIVELOG; \n";
+                            }
+                        }
+                        if ("".equals(contenido)) {
+                            String texto = "connect target sys/root@\"+this.se.ip+\";\n"
+                                    + "shutdown\n"
+                                    + "startup mount\n"
+                                    + "spool log to \"./logs/MyLog.log\"\n"
+                                    + contenido
+                                    + "alter database open resetlogs;\n"
+                                    + "spool log off";
+
+                            FileWriter lector2 = new FileWriter("./rman/" + TextNombreEstrategia.getText() + ".rcv");
+                            BufferedWriter contenido2 = new BufferedWriter(lector2);
+                            contenido2.write(texto);
+                            contenido2.close();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        if ("Caliente".equals(es.tipo_respaldo)) {
+            if ("Archive".equals(es.modo_respaldo)) {
+                if (jCheckBox1.isSelected()) {
+                    try {
+
+                        // Escritura del archivo RCV
+                        String texto2 = "connect target sys/root@\"+this.se.ip+\";\n"
+                                + "spool log to \"./logs/MyLog.log\"\n"
+                                + "BACKUP DATABASE SPFILE PLUS ARCHIVELOG;\n"
+                                + "spool log off";
+                        FileWriter lector2 = new FileWriter("./rman/" + TextNombreEstrategia.getText() + ".rcv");
+                        BufferedWriter contenido2 = new BufferedWriter(lector2);
+                        contenido2.write(texto2);
+                        contenido2.close();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        String contenido = "";
+                        for (int i = 0; i < this.Tablespaces.getRowCount(); i++) {
+                            if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
+                                contenido += "BACKUP TABLESPACE" + Tablespaces.getValueAt(i, 0).toString() + "PLUS ARCHIVELOG; \n";
+                            }
+                        }
+                        if ("".equals(contenido)) {
+                            String texto = "connect target sys/root@\"+this.se.ip+\";\n"
+                                    + "spool log to \"./logs/MyLog.log\"\n"
+                                    + contenido
+                                    + "spool log off";
+
+                            FileWriter lector2 = new FileWriter("./rman/" + TextNombreEstrategia.getText() + ".rcv");
+                            BufferedWriter contenido2 = new BufferedWriter(lector2);
+                            contenido2.write(texto);
+                            contenido2.close();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if ("No Archive".equals(es.modo_respaldo)) {
+                if (jCheckBox1.isSelected()) {
+                    try {
+
+                        // Escritura del archivo RCV
+                        String texto2 = "connect target sys/root@\"+this.se.ip+\";\n"
+                                + "spool log to \"./logs/MyLog.log\"\n"
+                                + "BACKUP DATABASE;\n"
+                                + "spool log off";
+                        FileWriter lector2 = new FileWriter("./rman/" + TextNombreEstrategia.getText() + ".rcv");
+                        BufferedWriter contenido2 = new BufferedWriter(lector2);
+                        contenido2.write(texto2);
+                        contenido2.close();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        String contenido = "";
+                        for (int i = 0; i < this.Tablespaces.getRowCount(); i++) {
+                            if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
+                                contenido += "BACKUP TABLESPACE" + Tablespaces.getValueAt(i, 0).toString() + "PLUS ARCHIVELOG; \n";
+                            }
+                        }
+                        if ("".equals(contenido)) {
+                            String texto = "connect target sys/root@\"+this.se.ip+\";\n"
+                                    + "spool log to \"./logs/MyLog.log\"\n"
+                                    + contenido
+                                    + "spool log off";
+
+                            FileWriter lector2 = new FileWriter("./rman/" + TextNombreEstrategia.getText() + ".rcv");
+                            BufferedWriter contenido2 = new BufferedWriter(lector2);
+                            contenido2.write(texto);
+                            contenido2.close();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton Archive;
