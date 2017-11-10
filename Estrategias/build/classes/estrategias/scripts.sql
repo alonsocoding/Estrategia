@@ -90,16 +90,24 @@ insert into Estrategia values('ES04', 'Frio', 'Manual', 'Archive', 'USERS, TEMP'
  	begin
         open c1;
  		fetch c1 into nombreEst;
+        if c1%found then
  		delete from estrategia where nombre_servidor = nombreServ;
-        --sp_dropJob(nombreEst); 
+        sp_dropJob(nombreEst); 
+        end if;
      end;
  /
  --Procedimiento para eliminar estrategia. (Eliminando solo la estrategia).
  create or replace procedure eliminarEstrategia(nombre varchar)
  	is
+    nombreEst varchar2(20);
+    Cursor c1 is 
+ 		select nombre_estrategia from estrategia where nombre_estrategia = nombreServ; --Para validar el procedure
  	begin
+        open c1;
+ 		if c1%found then
  		delete from estrategia where nombre_estrategia = nombre;
-         --sp_dropJob(nombre); 
+        sp_dropJob(nombre);
+        end if;
      end;
  /
  --Procedmiento para elimnar el job de la estrategia.
