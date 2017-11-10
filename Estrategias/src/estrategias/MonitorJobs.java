@@ -215,9 +215,13 @@ public class MonitorJobs extends javax.swing.JFrame {
                 ContrasenaText.getText(),
                 IPText.getText(),
                 Integer.parseInt(PuertoText.getText()));
-
+            // Conexion con base y lanza sql --->Primero eliminamos el servidor.
             conn = Dao.Enlace(conn);
-            Dao.updateServidor(se);
+            Dao.deleteServidor(ServidorText.getText());
+            //Crea un nuevo servidor con los datos nuevos jjj.
+            Dao.insertServidor(se);
+            Dao.createDatabaseLink(ServidorText.getText(), BaseText.getText(), UsuarioText.getText() ,ContrasenaText.getText(), IPText.getText(), PuertoText.getText());
+         
  
             conn.close();
 
