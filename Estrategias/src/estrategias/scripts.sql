@@ -64,56 +64,56 @@ insert into Estrategia values('ES02', 'Frio', 'Manual', 'Archive', 'USERS, TEMP'
 insert into Estrategia values('ES03', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE03',1,'SE03'); 
 insert into Estrategia values('ES04', 'Frio', 'Manual', 'Archive', 'USERS, TEMP','PE03',1,'SE01'); 
 -----------------------------------------------------------------------------------------------
- +--------------------------------------PROCEDIMIENTOS-------------------------------------------
- +
- +--Procedimiento para eliminar un servidor
- +create or replace procedure eliminarServidor(nombreServ varchar)
- +	is
- +	nombre varchar2(20);
- +	Cursor c1 is 
- +		select nombre_servidor from Servidor where nombre_servidor = nombreServ;
- +	begin
- +		open c1;
- +		fetch c1 into nombre;
- +        if c1%found then
- +            eliminarServidor2(nombre); --Para elimnar estrategia hay que usar el metodo de david, pero con el nombre _servidor
- +            delete from servidor where nombre_servidor = nombre;
- +        end if;
- +    end;
- +/
- +--Procedimiento para eliminar estrategia. (cuando se eliminar servidor)
- +create or replace procedure eliminarServidor2(nombreServ varchar)
- +	is
- +    nombreEst varchar2(20);
- +    Cursor c1 is 
- +		select nombre_estrategia from estrategia where nombre_servidor = nombreServ;
- +	begin
- +        open c1;
- +		fetch c1 into nombreEst;
- +		delete from estrategia where nombre_servidor = nombreServ;
- +        sp_dropJob(nombreEst); 
- +    end;
- +/
- +--Procedimiento para eliminar estrategia. (Eliminando solo la estrategia).
- +create or replace procedure eliminarEstrategia(nombre varchar)
- +	is
- +	begin
- +		delete from estrategia where nombre_estrategia = nombre;
- +        sp_dropJob(nombre); 
- +    end;
- +/
- +--Procedmiento para elimnar el job de la estrategia.
- +create or replace procedure sp_dropJob(estrategia varchar)
- +is
- +begin 
- +    dbms_scheduler.drop_job ( 
- +        job_name    => estrategia);
- +    commit;
- +end; 
- +/
- +
- +
- +-- Procedimiento para crear el job de la estrategia.
+ --------------------------------------PROCEDIMIENTOS-------------------------------------------
+ 
+ --Procedimiento para eliminar un servidor
+ create or replace procedure eliminarServidor(nombreServ varchar)
+ 	is
+ 	nombre varchar2(20);
+ 	Cursor c1 is 
+ 		select nombre_servidor from Servidor where nombre_servidor = nombreServ;
+ 	begin
+ 		open c1;
+ 		fetch c1 into nombre;
+         if c1%found then
+             eliminarServidor2(nombre); --Para elimnar estrategia hay que usar el metodo de david, pero con el nombre _servidor
+             delete from servidor where nombre_servidor = nombre;
+         end if;
+     end;
+ /
+ --Procedimiento para eliminar estrategia. (cuando se eliminar servidor)
+ create or replace procedure eliminarServidor2(nombreServ varchar)
+ 	is
+     nombreEst varchar2(20);
+     Cursor c1 is 
+ 		select nombre_estrategia from estrategia where nombre_servidor = nombreServ;
+ 	begin
+         open c1;
+ 		fetch c1 into nombreEst;
+ 		delete from estrategia where nombre_servidor = nombreServ;
+         sp_dropJob(nombreEst); 
+     end;
+ /
+ --Procedimiento para eliminar estrategia. (Eliminando solo la estrategia).
+ create or replace procedure eliminarEstrategia(nombre varchar)
+ 	is
+ 	begin
+ 		delete from estrategia where nombre_estrategia = nombre;
+         sp_dropJob(nombre); 
+     end;
+ /
+ --Procedmiento para elimnar el job de la estrategia.
+ create or replace procedure sp_dropJob(estrategia varchar)
+ is
+ begin 
+     dbms_scheduler.drop_job ( 
+         job_name    => estrategia);
+     commit;
+ end; 
+ /
+ 
+ 
+ -- Procedimiento para crear el job de la estrategia.
  create or replace procedure sp_createJob(estrategia varchar, ruta varchar, frecuencia varchar, inicio timestamp)
  is
  begin    
@@ -129,68 +129,68 @@ insert into Estrategia values('ES04', 'Frio', 'Manual', 'Archive', 'USERS, TEMP'
      commit;
  end;
  /
- +
- +--Procedimiento que actualiza la frecuencia de la estrategia
- +create or replace procedure alterJob(estrategia varchar, frecuencia varchar)
- +is
- +BEGIN
- +DBMS_SCHEDULER.SET_ATTRIBUTE (estrategia,
- +   'repeat_interval', 'FREQ=WEEKLY;'+frecuencia);
- +commit;   
- +END;
- +/
- +
- +--Procedimiento para deshabilitar un job
- +create or replace procedure deshabilitarJob(estrategia varchar)
- +is
- +BEGIN 
- +  DBMS_SCHEDULER.DISABLE(estrategia);
- +  commit;
- +END;
- +/
- +
- +--Procedimiento para habilitar un job
- +create or replace procedure habilitarJob(estrategia varchar)
- +is
- +BEGIN 
- +  DBMS_SCHEDULER.ENABLE(estrategia);
- +  commit;
- +END;
- +/
- +
- +-------------------------------------------------------------------------------------------------------
- +
- +select Servidor.nombre_servidor, Estrategia.nombre_estrategia 
- +from Servidor, Estrategia, Contiene 
- +where Servidor.nombre_servidor = Contiene.nombre_servidor
- +and Estrategia.nombre_estrategia = Contiene.nombre_estrategia 
- +and Servidor.nombre_servidor = 'SE03';
- +
- +-- Create database link --
- +
- +CREATE PUBLIC DATABASE LINK DLBD1
- +CONNECT TO U1
- +IDENTIFIED BY "U1"
- +USING 'CBD1';
- +
- +-- Create database link without tnsname.ora --
- +
- +CREATE PUBLIC DATABASE LINK DLBD2
- +CONNECT TO system identified BY "root"
- +USING
- +'(DESCRIPTION =
- +    (ADDRESS = (PROTOCOL = TCP)(HOST = 172.17.28.149)(PORT = 1521))
- +    (CONNECT_DATA =
- +      (SERVER = DEDICATED)
- +      (SERVICE_NAME = XE)
- +      (SID = XE)
- +    )
- +  )'
- +/
- +
- +CREATE DATABASE LINK dl1
- +CONNECT TO SYSTEM IDENTIFIED BY root
- +USING 'dl1';
+ 
+ --Procedimiento que actualiza la frecuencia de la estrategia
+ create or replace procedure alterJob(estrategia varchar, frecuencia varchar)
+ is
+ BEGIN
+ DBMS_SCHEDULER.SET_ATTRIBUTE (estrategia,
+    'repeat_interval', 'FREQ=WEEKLY;'+frecuencia);
+ commit;   
+ END;
+ /
+ 
+ --Procedimiento para deshabilitar un job
+ create or replace procedure deshabilitarJob(estrategia varchar)
+ is
+ BEGIN 
+   DBMS_SCHEDULER.DISABLE(estrategia);
+   commit;
+ END;
+ /
+ 
+ --Procedimiento para habilitar un job
+ create or replace procedure habilitarJob(estrategia varchar)
+ is
+ BEGIN 
+   DBMS_SCHEDULER.ENABLE(estrategia);
+   commit;
+ END;
+ /
+ 
+ -------------------------------------------------------------------------------------------------------
+ 
+ select Servidor.nombre_servidor, Estrategia.nombre_estrategia 
+ from Servidor, Estrategia, Contiene 
+ where Servidor.nombre_servidor = Contiene.nombre_servidor
+ and Estrategia.nombre_estrategia = Contiene.nombre_estrategia 
+ and Servidor.nombre_servidor = 'SE03';
+ 
+ -- Create database link --
+ 
+ CREATE PUBLIC DATABASE LINK DLBD1
+ CONNECT TO U1
+ IDENTIFIED BY "U1"
+ USING 'CBD1';
+ 
+ -- Create database link without tnsname.ora --
+ 
+ CREATE PUBLIC DATABASE LINK DLBD2
+ CONNECT TO system identified BY "root"
+ USING
+ '(DESCRIPTION =
+     (ADDRESS = (PROTOCOL = TCP)(HOST = 172.17.28.149)(PORT = 1521))
+     (CONNECT_DATA =
+       (SERVER = DEDICATED)
+       (SERVICE_NAME = XE)
+       (SID = XE)
+     )
+   )'
+ /
+ 
+ CREATE DATABASE LINK dl1
+ CONNECT TO SYSTEM IDENTIFIED BY root
+ USING 'dl1';
 
 -- Conectarse RMAN --
 -- $ rman --
