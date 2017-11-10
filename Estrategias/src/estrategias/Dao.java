@@ -11,9 +11,9 @@ public class Dao {
     static ResultSet rs = null;
 
     static String bd = "XE";
-    static String username = "bases";
-    static String password = "bases";
-    static String url = "jdbc:oracle:thin:@Josema:1521:XE";
+    static String username = "sys as sysdba";
+    static String password = "root";
+    static String url = "jdbc:oracle:thin:@alonso-PC:1521:XE";
 
     public static Connection Enlace(Connection conn) throws SQLException {
         try {
@@ -128,7 +128,7 @@ public class Dao {
     
     
      public static void createJob(String nombre_estrategia, String ruta, String frecuencia, Timestamp inicio) throws SQLException {
-        CallableStatement cst = conn.prepareCall("{call sp_createJob('" + nombre_estrategia + "', '"+ruta+"', '"+frecuencia+"', '"+inicio+"')}");
+        CallableStatement cst = conn.prepareCall("{call sp_createJob('" + nombre_estrategia + "', '"+ruta+"', '"+frecuencia+"', SYSTIMESTAMP)}");
         cst.execute();
     }
 

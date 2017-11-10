@@ -101,7 +101,7 @@ insert into Estrategia values('ES04', 'Frio', 'Manual', 'Archive', 'USERS, TEMP'
  	is
     nombreEst varchar2(20);
     Cursor c1 is 
- 		select nombre_estrategia from estrategia where nombre_estrategia = nombreServ; --Para validar el procedure
+ 		select nombre_estrategia from estrategia where nombre_estrategia = nombre; --Para validar el procedure
  	begin
         open c1;
  		if c1%found then

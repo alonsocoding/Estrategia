@@ -459,9 +459,10 @@ public class Diseno extends javax.swing.JFrame {
 
             GuardarArchivosBat(); // Crea los rcv y bat
             GuardarArchivosRCV(es); // Crea los rcv y bat
-            Timestamp s = new Timestamp(System.currentTimeMillis());
+            java.util.Date mls = new java.util.Date();
+            java.sql.Timestamp s = new java.sql.Timestamp(mls.getTime());
             if ("Automatico".equals(modo)) {
-                Dao.createJob2(es.nombre_estrategia, "C:\\Users\\alonso\\Desktop\\Estrategia\\Estrategias\\rman\\ES9S.bat", "BYHOUR=4;BYMINUTE=1", s);
+                Dao.createJob(es.nombre_estrategia,"C:\\Users\\alonso\\Desktop\\Estrategia\\Estrategias\\rman\\ES9S.bat", "BYHOUR=4;BYMINUTE=1",s);
             }
 
             conn.close();
