@@ -11,9 +11,9 @@ public class Dao {
     static ResultSet rs = null;
 
     static String bd = "XE";
-    static String username = "sys as sysdba";
+    static String username = "sys as sydba";
     static String password = "root";
-    static String url = "jdbc:oracle:thin:@alonso-PC:1521:XE";
+    static String url = "jdbc:oracle:thin:@David-Chaves:1521:XE";
 
     public static Connection Enlace(Connection conn) throws SQLException {
         try {

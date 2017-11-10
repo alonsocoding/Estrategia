@@ -1,0 +1,89 @@
+
+Recovery Manager: Release 11.2.0.2.0 - Production on Vie Nov 10 10:47:12 2017
+
+Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
+
+RMAN> connect target *
+2> BACKUP DATABASE PLUS ARCHIVELOG;
+3> 
+connected to target database: XE (DBID=2827193449)
+
+
+Starting backup at 10/11/17
+current log archived
+using target database control file instead of recovery catalog
+allocated channel: ORA_DISK_1
+channel ORA_DISK_1: SID=776 device type=DISK
+channel ORA_DISK_1: starting archived log backup set
+channel ORA_DISK_1: specifying archived log(s) in backup set
+input archived log thread=1 sequence=48 RECID=12 STAMP=958759399
+input archived log thread=1 sequence=49 RECID=13 STAMP=958759415
+input archived log thread=1 sequence=50 RECID=14 STAMP=958759418
+input archived log thread=1 sequence=51 RECID=15 STAMP=958759436
+input archived log thread=1 sequence=52 RECID=16 STAMP=958759472
+input archived log thread=1 sequence=53 RECID=18 STAMP=958763394
+input archived log thread=1 sequence=54 RECID=17 STAMP=958763394
+input archived log thread=1 sequence=55 RECID=19 STAMP=958763395
+input archived log thread=1 sequence=56 RECID=20 STAMP=958763395
+input archived log thread=1 sequence=57 RECID=21 STAMP=958826734
+input archived log thread=1 sequence=58 RECID=22 STAMP=958826734
+input archived log thread=1 sequence=59 RECID=23 STAMP=958826734
+input archived log thread=1 sequence=60 RECID=25 STAMP=958826734
+input archived log thread=1 sequence=61 RECID=27 STAMP=958826734
+channel ORA_DISK_1: starting piece 1 at 10/11/17
+channel ORA_DISK_1: finished piece 1 at 10/11/17
+piece handle=C:\ORACLEXE\APP\ORACLE\FAST_RECOVERY_AREA\XE\BACKUPSET\2017_11_10\O1_MF_ANNNN_TAG20171110T104717_F0CP0RHN_.BKP tag=TAG20171110T104717 comment=NONE
+channel ORA_DISK_1: backup set complete, elapsed time: 00:00:03
+channel ORA_DISK_1: starting archived log backup set
+channel ORA_DISK_1: specifying archived log(s) in backup set
+input archived log thread=1 sequence=1 RECID=31 STAMP=959100828
+input archived log thread=1 sequence=2 RECID=32 STAMP=959419886
+input archived log thread=1 sequence=3 RECID=33 STAMP=959511975
+input archived log thread=1 sequence=4 RECID=34 STAMP=959626323
+input archived log thread=1 sequence=5 RECID=35 STAMP=959626410
+input archived log thread=1 sequence=6 RECID=36 STAMP=959639168
+input archived log thread=1 sequence=7 RECID=37 STAMP=959682750
+input archived log thread=1 sequence=8 RECID=38 STAMP=959682875
+input archived log thread=1 sequence=9 RECID=39 STAMP=959683635
+channel ORA_DISK_1: starting piece 1 at 10/11/17
+channel ORA_DISK_1: finished piece 1 at 10/11/17
+piece handle=C:\ORACLEXE\APP\ORACLE\FAST_RECOVERY_AREA\XE\BACKUPSET\2017_11_10\O1_MF_ANNNN_TAG20171110T104717_F0CP0WTR_.BKP tag=TAG20171110T104717 comment=NONE
+channel ORA_DISK_1: backup set complete, elapsed time: 00:00:15
+Finished backup at 10/11/17
+
+Starting backup at 10/11/17
+using channel ORA_DISK_1
+channel ORA_DISK_1: starting full datafile backup set
+channel ORA_DISK_1: specifying datafile(s) in backup set
+input datafile file number=00002 name=C:\ORACLEXE\APP\ORACLE\ORADATA\XE\SYSAUX.DBF
+input datafile file number=00003 name=C:\ORACLEXE\APP\ORACLE\ORADATA\XE\UNDOTBS1.DBF
+input datafile file number=00001 name=C:\ORACLEXE\APP\ORACLE\ORADATA\XE\SYSTEM.DBF
+input datafile file number=00004 name=C:\ORACLEXE\APP\ORACLE\ORADATA\XE\USERS.DBF
+input datafile file number=00005 name=C:\ORACLEXE\APP\ORACLE\PRODUCT\11.2.0\SERVER\DATABASE\TBS_F2.DBF
+channel ORA_DISK_1: starting piece 1 at 10/11/17
+channel ORA_DISK_1: finished piece 1 at 10/11/17
+piece handle=C:\ORACLEXE\APP\ORACLE\FAST_RECOVERY_AREA\XE\BACKUPSET\2017_11_10\O1_MF_NNNDF_TAG20171110T104740_F0CP1G47_.BKP tag=TAG20171110T104740 comment=NONE
+channel ORA_DISK_1: backup set complete, elapsed time: 00:01:06
+channel ORA_DISK_1: starting full datafile backup set
+channel ORA_DISK_1: specifying datafile(s) in backup set
+including current control file in backup set
+including current SPFILE in backup set
+channel ORA_DISK_1: starting piece 1 at 10/11/17
+channel ORA_DISK_1: finished piece 1 at 10/11/17
+piece handle=C:\ORACLEXE\APP\ORACLE\FAST_RECOVERY_AREA\XE\BACKUPSET\2017_11_10\O1_MF_NCSNF_TAG20171110T104740_F0CP3K5C_.BKP tag=TAG20171110T104740 comment=NONE
+channel ORA_DISK_1: backup set complete, elapsed time: 00:00:01
+Finished backup at 10/11/17
+
+Starting backup at 10/11/17
+current log archived
+using channel ORA_DISK_1
+channel ORA_DISK_1: starting archived log backup set
+channel ORA_DISK_1: specifying archived log(s) in backup set
+input archived log thread=1 sequence=10 RECID=40 STAMP=959683731
+channel ORA_DISK_1: starting piece 1 at 10/11/17
+channel ORA_DISK_1: finished piece 1 at 10/11/17
+piece handle=C:\ORACLEXE\APP\ORACLE\FAST_RECOVERY_AREA\XE\BACKUPSET\2017_11_10\O1_MF_ANNNN_TAG20171110T104851_F0CP3NFS_.BKP tag=TAG20171110T104851 comment=NONE
+channel ORA_DISK_1: backup set complete, elapsed time: 00:00:01
+Finished backup at 10/11/17
+
+Recovery Manager complete.

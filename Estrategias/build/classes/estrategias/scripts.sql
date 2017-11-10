@@ -122,21 +122,21 @@ insert into Estrategia values('ES04', 'Frio', 'Manual', 'Archive', 'USERS, TEMP'
  /
  
  -- Procedimiento para crear el job de la estrategia.
- create or replace procedure sp_createJob(estrategia varchar, ruta varchar, frecuencia varchar, inicio timestamp)
- is
- begin    
-     dbms_scheduler.create_job( 
-         job_name        => estrategia, 
-         job_type        => 'EXECUTABLE', 
-         job_action      => ruta, 
-         start_date      => inicio, 
-         repeat_interval => 'FREQ=MINUTELY;BYMINUTE=1', 
-         enabled         => false, 
-         comments        => 'Backup database using RMAN'); 
-     --dbms_scheduler.run_job(job_name=> estrategia,USE_CURRENT_SESSION=>true);
-     commit;
- end;
- /
+create or replace procedure sp_createJob(estrategia varchar, ruta varchar, frecuencia varchar, inicio timestamp)
+is
+begin    
+    dbms_scheduler.create_job( 
+        job_name        => estrategia, 
+        job_type        => 'EXECUTABLE', 
+        job_action      => ruta, 
+        start_date      => inicio, 
+        repeat_interval => 'FREQ=MINUTELY;BYMINUTE=1', 
+        enabled         => false, 
+        comments        => 'Backup database using RMAN'); 
+    dbms_scheduler.run_job(job_name=>estrategia,USE_CURRENT_SESSION=>true);
+	commit;
+end;
+/
  +
  +--Procedimiento que actualiza la frecuencia de la estrategia
  +create or replace procedure alterJob(estrategia varchar, frecuencia varchar)
