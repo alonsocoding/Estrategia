@@ -1,1 +1,2 @@
+connect target sys/root@172.17.31.123;
 BACKUP DATABASE PLUS ARCHIVELOG;

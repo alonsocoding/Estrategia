@@ -136,6 +136,11 @@ public class Dao {
         CallableStatement cst = conn.prepareCall("{call sp_dropJob ('" + nombre_estrategia + "')}");
         cst.execute();
     }
+    
+    public static void runJob(String nombre_estrategia) throws SQLException {
+        CallableStatement cst = conn.prepareCall("{call sp_runJob ('" + nombre_estrategia + "')}");
+        cst.execute();
+    }
 
     public static void alterJob(String nombre_estrategia, String frecuencia) throws SQLException {
         CallableStatement cst = conn.prepareCall("{call alterJob('" + nombre_estrategia + "', '"+frecuencia+"')}");
