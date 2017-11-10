@@ -141,13 +141,13 @@ public class Estrategias extends javax.swing.JFrame {
 
         TableEstrategias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Nombre", "Tipo", "Modo", "Metodo", "Objetos", "Periodo"
+                "Nombre", "Tipo", "Modo", "Metodo", "Objetos", "Periodo", "Estado"
             }
         ));
         jScrollPane3.setViewportView(TableEstrategias);
@@ -218,7 +218,7 @@ public class Estrategias extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2))
-                        .addGap(0, 559, Short.MAX_VALUE))
+                        .addGap(0, 631, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
