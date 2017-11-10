@@ -5,10 +5,14 @@
  */
 package estrategias;
 
+import static estrategias.Estrategias.selectedRow;
+import static estrategias.Estrategias.servidores;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.text.SimpleDateFormat;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,17 +23,20 @@ public class Logs extends javax.swing.JFrame {
     /**
      * Creates new form Logs
      */
+    static DefaultTableModel logs = new DefaultTableModel();
+    static int selectedRow = 0;
     public Logs() {
         initComponents();
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(new Color(44,112,213));
-        String sDirectorio = "C:\\Users\\alonso\\Desktop\\Estrategia\\Estrategias\\logs";
-        File f = new File(sDirectorio);
-        File[] ficheros = f.listFiles();
-        for (int x=0;x<ficheros.length;x++){
-             System.out.println(ficheros[x].getName());
-             System.out.println(ficheros[x].getAbsolutePath());
-        }
+        
+        this.TableLogs.setModel(logs);
+        logs.addColumn("Nombre del Log");
+        logs.addColumn("Ubicacion del Log");
+        logs.addColumn("Fecha");
+        
+        eliminar();
+        cargarLogs();
     }
     
     public Logs(Estrategia es) {
@@ -51,17 +58,19 @@ public class Logs extends javax.swing.JFrame {
 
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        TableServidores = new javax.swing.JTable();
+        TableLogs = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         ContenidoLog = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
 
+        setTitle("Logs");
+
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Logs de la Estrategia");
 
-        TableServidores.setModel(new javax.swing.table.DefaultTableModel(
+        TableLogs.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -72,12 +81,12 @@ public class Logs extends javax.swing.JFrame {
                 "Nombre de Log", "Ubicacion del Log", "Fecha"
             }
         ));
-        TableServidores.addMouseListener(new java.awt.event.MouseAdapter() {
+        TableLogs.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                TableServidoresMouseClicked(evt);
+                TableLogsMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(TableServidores);
+        jScrollPane1.setViewportView(TableLogs);
 
         jButton1.setText("Ver Log");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -137,16 +146,20 @@ public class Logs extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TableServidoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableServidoresMouseClicked
+    private void TableLogsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableLogsMouseClicked
         
 
-    }//GEN-LAST:event_TableServidoresMouseClicked
+    }//GEN-LAST:event_TableLogsMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // VER LOG ESCOGIDO LEER ARCHIVO 
         try {
+            
+         selectedRow = TableLogs.getSelectedRow();
+         String direccion = logs.getValueAt(selectedRow, 1).toString();
+         ContenidoLog.setText("");
        String cadena;
-         FileReader f = new FileReader("./rman/ES07.bat");
+         FileReader f = new FileReader(direccion);
          BufferedReader b = new BufferedReader(f);
          while((cadena = b.readLine())!=null) {
          ContenidoLog.setText(ContenidoLog.getText() + "\n" + cadena);
@@ -191,10 +204,31 @@ public class Logs extends javax.swing.JFrame {
             }
         });
     }
+    public void cargarLogs() {
+        String sDirectorio = "./logs";
+        File f = new File(sDirectorio);
+        File[] ficheros = f.listFiles();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        
+        for (int x=0;x<ficheros.length;x++){
+             Object[] fila = new Object[3];
+             fila[0] = ficheros[x].getName();
+             fila[1] = ficheros[x].getAbsolutePath();
+             fila[2] = sdf.format(ficheros[x].lastModified());
+             logs.addRow(fila);
+        }
+    }
+    public void eliminar(){
+        logs = (DefaultTableModel) TableLogs.getModel();
+        int a = TableLogs.getRowCount()-1;
+            for (int i = a; i >= 0; i--) {           
+                logs.removeRow(logs.getRowCount()-1);
+            }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea ContenidoLog;
-    private javax.swing.JTable TableServidores;
+    private javax.swing.JTable TableLogs;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
