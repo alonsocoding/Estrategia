@@ -390,7 +390,7 @@ public class Estrategias extends javax.swing.JFrame {
         try {
             // Conexion con base y lanza sql
             conn = Dao.Enlace(conn);
-            Dao.deleteEstrategia(nombre_estrategia);
+            Dao.elimnarEstrategia(nombre_estrategia);
             
             res.close();
             conn.close();
@@ -425,7 +425,7 @@ public class Estrategias extends javax.swing.JFrame {
         try {
             // Conexion con base y lanza sql
             conn = Dao.Enlace(conn);
-            Dao.deleteServidor(nombre_servidor);
+            Dao.eliminarServidor(nombre_servidor);
             
             res.close();
             conn.close();
