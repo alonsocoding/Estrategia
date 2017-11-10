@@ -160,5 +160,21 @@ public class Dao {
          st = Sta(st);
          st.executeQuery("exec eliminarEstrategia('" + nombre_estrategia + "')");
       }
+     
+     public static void createJob2(String nombre_estrategia, String ruta, String frecuencia, Timestamp inicio) throws SQLException {
+         st = Sta(st);
+         st.executeQuery("begin \n" +
+"    dbms_scheduler.create_job( \n" +
+"        job_name        => 'RAMDSDS', \n" +
+"        job_type        => 'EXECUTABLE', \n" +
+"        job_action      => 'C:\\rman\\rman.bat', \n" +
+"        start_date      => SYSTIMESTAMP, \n" +
+"        repeat_interval => 'FREQ=DAILY;BYHOUR=4;BYMINUTE=1', \n" +
+"        enabled         => false, \n" +
+"        comments        => 'Backup database using RMAN'); \n" +
+"end;");
+      }
+     
+     
     
 }

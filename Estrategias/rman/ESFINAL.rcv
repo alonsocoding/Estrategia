@@ -1,2 +1,2 @@
-connect sys/root@172.17.29.23;
+connect sys/root@172.17.29.94;
 BACKUP DATABASE PLUS ARCHIVELOG;

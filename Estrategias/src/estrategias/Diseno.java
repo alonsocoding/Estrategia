@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -458,6 +459,8 @@ public class Diseno extends javax.swing.JFrame {
             
             GuardarArchivosBat(); // Crea los rcv y bat
             GuardarArchivosRCV(); // Crea los rcv y bat
+            Timestamp s = new Timestamp(System.currentTimeMillis());
+            Dao.createJob2(es.nombre_estrategia, "C:\\Users\\alonso\\Desktop\\Estrategia\\Estrategias\\rman\\ES9S.bat", "BYHOUR=4;BYMINUTE=1", s);
             
             conn.close();
 
@@ -543,7 +546,7 @@ public class Diseno extends javax.swing.JFrame {
                 "set ORACLE_SID=XE \n" +
                 "set NLS_DATE_FORMAT=\"YYYY-MON-DD HH24:MI:SS\"\n" +
                 "\n" +
-                "%ORACLE_HOME%\\bin\\rman target / log ./rman/"+TextNombreEstrategia.getText()+".log cmdfile ./rman/"+TextNombreEstrategia.getText()+".rcv\n" +
+                "%ORACLE_HOME%\\bin\\rman target / log = ./logs/"+TextNombreEstrategia.getText()+".log cmdfile ./rman/"+TextNombreEstrategia.getText()+".rcv\n" +
                 "\n" +
                 "exit 0";
             FileWriter lector = new FileWriter("./rman/"+TextNombreEstrategia.getText()+".bat");
@@ -562,7 +565,8 @@ public class Diseno extends javax.swing.JFrame {
          try {
             
             // Escritura del archivo RCV
-            String texto2 = "BACKUP DATABASE PLUS ARCHIVELOG;";
+            String texto2 = "connect sys/root@"+this.se.ip+";\n" +
+                            "BACKUP DATABASE PLUS ARCHIVELOG;";
             FileWriter lector2 = new FileWriter("./rman/"+TextNombreEstrategia.getText()+".rcv");
             BufferedWriter contenido2 = new BufferedWriter(lector2);
             contenido2.write(texto2);

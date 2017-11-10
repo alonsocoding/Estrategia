@@ -7,6 +7,7 @@ package estrategias;
 
 import java.awt.Color;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 
 /**
@@ -22,6 +23,13 @@ public class Logs extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(new Color(44,112,213));
+        String sDirectorio = "C:\\Users\\alonso\\Desktop\\Estrategia\\Estrategias\\logs";
+        File f = new File(sDirectorio);
+        File[] ficheros = f.listFiles();
+        for (int x=0;x<ficheros.length;x++){
+             System.out.println(ficheros[x].getName());
+             System.out.println(ficheros[x].getAbsolutePath());
+        }
     }
     
     public Logs(Estrategia es) {
@@ -55,13 +63,13 @@ public class Logs extends javax.swing.JFrame {
 
         TableServidores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"MF", "C:\oraclexe\app\oracle\fast_recovery_area\XE\ONLINELOG", "10/23/2017"},
+                {null, null, null},
                 {null, null, null},
                 {null, null, null},
                 {null, null, null}
             },
             new String [] {
-                "Nombre de LogFile", "Ubicacion Fisica", "Fecha"
+                "Nombre de Log", "Ubicacion del Log", "Fecha"
             }
         ));
         TableServidores.addMouseListener(new java.awt.event.MouseAdapter() {
