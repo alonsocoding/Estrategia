@@ -462,7 +462,7 @@ public class Diseno extends javax.swing.JFrame {
             java.util.Date mls = new java.util.Date();
             java.sql.Timestamp s = new java.sql.Timestamp(mls.getTime());
             if ("Automatico".equals(modo)) {
-                Dao.createJob(es.nombre_estrategia,"C:\\Estrategias\\rman"+TextNombreEstrategia.getText()+".bat", "FREQ=MINUTELY;BYMINUTE=1",s);
+                Dao.createJob(es.nombre_estrategia,"C:\\Estrategias\\rman\\"+TextNombreEstrategia.getText()+".bat", "FREQ=MINUTELY;BYMINUTE=1",s);
                // Dao.runJob(TextNombreEstrategia.getText());
             }
 
@@ -550,7 +550,8 @@ public class Diseno extends javax.swing.JFrame {
                     + "set ORACLE_SID=XE \n"
                     + "set NLS_DATE_FORMAT=\"YYYY-MON-DD HH24:MI:SS\"\n"
                     + "\n"
-                    + "%ORACLE_HOME%\\bin\\rman log C:\\Estrategias\\logs\\" + TextNombreEstrategia.getText() + "\\"+ TextNombreEstrategia.getText()+jXDatePicker1.getDate().toString()+"-"+textHora.getText()+":"+textMinutos.getText()+":"+textSegundos.getText()+".log cmdfile C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv\n"
+                    //+ "%ORACLE_HOME%\\bin\\rman log C:\\Estrategias\\logs\\" + TextNombreEstrategia.getText() + "\\"+ TextNombreEstrategia.getText()+jXDatePicker1.getDate().toString()+"-"+textHora.getText()+":"+textMinutos.getText()+":"+textSegundos.getText()+".log cmdfile C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv\n"
+                    + "%ORACLE_HOME%\\bin\\rman log C:\\Estrategias\\logs\\" + TextNombreEstrategia.getText() +".log cmdfile C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv\n"
                     + "\n"
                     + "exit 0";
 

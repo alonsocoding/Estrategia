@@ -88,11 +88,11 @@ insert into Estrategia values('ES04', 'Frio', 'Manual', 'Archive', 'USERS, TEMP'
  	begin
         open c1;
  	fetch c1 into nombreEst;
-        --while c1 % found loop
-        fetch c1 into nombreEst;
+        while c1 % found loop
  	delete from estrategia where nombre_servidor = nombreEst;
         sp_dropJob(nombreEst); 
-        --end loop;
+        fetch c1 into nombreEst;
+        end loop;
      end;
  /
  --Procedimiento para eliminar estrategia. (Eliminando solo la estrategia).
@@ -116,7 +116,7 @@ insert into Estrategia values('ES04', 'Frio', 'Manual', 'Archive', 'USERS, TEMP'
  create or replace procedure sp_runJob(estrategia varchar)
  is
  begin 
-     dbms_scheduler.run_job(job_name=> estrategia,USE_CURRENT_SESSION=>true);
+     dbms_scheduler.run_job(job_name=> estrategia,USE_CURRENT_SESSION=>false);
     commit;
  end; 
  /
@@ -132,7 +132,8 @@ begin
         start_date      => inicio, 
         repeat_interval => 'FREQ=MINUTELY;BYMINUTE=1', 
         enabled         => false, 
-        comments        => 'Backup database using RMAN'); 
+        comments        => 'Backup database using RMAN');
+    --dbms_scheduler.enable(estrategia);
     dbms_scheduler.run_job(job_name=>estrategia,USE_CURRENT_SESSION=>true);
 	commit;
 end;
