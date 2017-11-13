@@ -13,7 +13,7 @@ public class Dao {
     static String bd = "XE";
     static String username = "sys as sysdba";
     static String password = "root";
-    static String url = "jdbc:oracle:thin:@Josema:1521:XE";
+    static String url = "jdbc:oracle:thin:@LAPTOP-I8IV3KN9:1521:XE";
 
     public static Connection Enlace(Connection conn) throws SQLException {
         try {

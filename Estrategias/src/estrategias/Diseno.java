@@ -8,6 +8,7 @@ package estrategias;
 import static estrategias.Estrategias.conn;
 import java.awt.Color;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -462,13 +463,14 @@ public class Diseno extends javax.swing.JFrame {
             java.util.Date mls = new java.util.Date();
             java.sql.Timestamp s = new java.sql.Timestamp(mls.getTime());
             if ("Automatico".equals(modo)) {
-                Dao.createJob(es.nombre_estrategia,"C:\\Estrategias\\rman\\"+TextNombreEstrategia.getText()+".bat", "FREQ=MINUTELY;BYMINUTE=1",s);
-               // Dao.runJob(TextNombreEstrategia.getText());
+                Dao.createJob(es.nombre_estrategia, "C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".bat", "FREQ=MINUTELY;BYMINUTE=1", s);
+                // Dao.runJob(TextNombreEstrategia.getText());
             }
 
             conn.close();
 
             JOptionPane.showMessageDialog(null, "La estrategia se ha registrado correctamente");
+            this.setVisible(false);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -545,16 +547,19 @@ public class Diseno extends javax.swing.JFrame {
 
     public void GuardarArchivosBat() {
         try {
+            File directorio = new File("C:\\Estrategias\\rman");
+            directorio.mkdirs();
+            File directorio2 = new File("C:\\Estrategias\\logs");
+            directorio2.mkdirs();
             // Escritura del archivo BAT
             String texto = "set ORACLE_HOME=C:\\Oracle\\product\\11.2.0\\server\n"
                     + "set ORACLE_SID=XE \n"
                     + "set NLS_DATE_FORMAT=\"YYYY-MON-DD HH24:MI:SS\"\n"
                     + "\n"
                     //+ "%ORACLE_HOME%\\bin\\rman log C:\\Estrategias\\logs\\" + TextNombreEstrategia.getText() + "\\"+ TextNombreEstrategia.getText()+jXDatePicker1.getDate().toString()+"-"+textHora.getText()+":"+textMinutos.getText()+":"+textSegundos.getText()+".log cmdfile C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv\n"
-                    + "%ORACLE_HOME%\\bin\\rman log C:\\Estrategias\\logs\\" + TextNombreEstrategia.getText() +".log cmdfile C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv\n"
+                    + "%ORACLE_HOME%\\bin\\rman log C:\\Estrategias\\logs\\" + TextNombreEstrategia.getText() + ".log cmdfile C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv\n"
                     + "\n"
                     + "exit 0";
-
             FileWriter lector = new FileWriter("C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".bat");
             BufferedWriter contenido = new BufferedWriter(lector);
             contenido.write(texto);
@@ -571,7 +576,7 @@ public class Diseno extends javax.swing.JFrame {
                 if (jCheckBox1.isSelected()) {
                     try {
                         // Escritura del archivo RCV
-                        String texto2 = "connect target sys/root@"+this.se.ip+";\n"
+                        String texto2 = "connect target sys/root@" + this.se.ip + ";\n"
                                 + "shutdown\n"
                                 + "startup mount\n"
                                 + "BACKUP DATABASE SPFILE PLUS ARCHIVELOG;\n"
@@ -593,7 +598,7 @@ public class Diseno extends javax.swing.JFrame {
                             }
                         }
                         if ("".equals(contenido)) {
-                            String texto = "connect target sys/root@"+this.se.ip+";\n"
+                            String texto = "connect target sys/root@" + this.se.ip + ";\n"
                                     + "shutdown\n"
                                     + "startup mount\n"
                                     + contenido
@@ -614,7 +619,7 @@ public class Diseno extends javax.swing.JFrame {
                     try {
 
                         // Escritura del archivo RCV
-                        String texto2 = "connect target sys/root@"+this.se.ip+";\n"
+                        String texto2 = "connect target sys/root@" + this.se.ip + ";\n"
                                 + "shutdown\n"
                                 + "startup mount\n"
                                 + "BACKUP DATABASE;\n"
@@ -636,7 +641,7 @@ public class Diseno extends javax.swing.JFrame {
                             }
                         }
                         if ("".equals(contenido)) {
-                            String texto = "connect target sys/root@"+this.se.ip+";\n"
+                            String texto = "connect target sys/root@" + this.se.ip + ";\n"
                                     + "shutdown\n"
                                     + "startup mount\n"
                                     + contenido
@@ -659,7 +664,7 @@ public class Diseno extends javax.swing.JFrame {
                     try {
 
                         // Escritura del archivo RCV
-                        String texto2 = "connect target sys/root@"+this.se.ip+";\n"
+                        String texto2 = "connect target sys/root@" + this.se.ip + ";\n"
                                 + "BACKUP DATABASE SPFILE PLUS ARCHIVELOG;\n";
                         FileWriter lector2 = new FileWriter("C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv");
                         BufferedWriter contenido2 = new BufferedWriter(lector2);
@@ -678,7 +683,7 @@ public class Diseno extends javax.swing.JFrame {
                             }
                         }
                         if ("".equals(contenido)) {
-                            String texto = "connect target sys/root@"+this.se.ip+";\n"
+                            String texto = "connect target sys/root@" + this.se.ip + ";\n"
                                     + contenido;
 
                             FileWriter lector2 = new FileWriter("C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv");
@@ -696,7 +701,7 @@ public class Diseno extends javax.swing.JFrame {
                     try {
 
                         // Escritura del archivo RCV
-                        String texto2 = "connect target sys/root@"+this.se.ip+";\n"
+                        String texto2 = "connect target sys/root@" + this.se.ip + ";\n"
                                 + "BACKUP DATABASE;\n";
                         FileWriter lector2 = new FileWriter("C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv");
                         BufferedWriter contenido2 = new BufferedWriter(lector2);
@@ -715,7 +720,7 @@ public class Diseno extends javax.swing.JFrame {
                             }
                         }
                         if ("".equals(contenido)) {
-                            String texto = "connect target sys/root@"+this.se.ip+";\n"
+                            String texto = "connect target sys/root@" + this.se.ip + ";\n"
                                     + contenido;
 
                             FileWriter lector2 = new FileWriter("C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv");
