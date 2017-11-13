@@ -2,7 +2,6 @@
 
 -- Drop tables --
 
-drop table Contiene;
 drop table Estrategia;
 drop table Periodo;
 drop table Servidor;
@@ -66,35 +65,6 @@ insert into Estrategia values('ES04', 'Frio', 'Manual', 'Archive', 'USERS, TEMP'
 -----------------------------------------------------------------------------------------------
  --------------------------------------PROCEDIMIENTOS-------------------------------------------
  
- --Procedimiento para eliminar un servidor
- create or replace procedure eliminarServidor(nombreServ varchar)
- 	is
- 	nombre varchar2(20);
- 	Cursor c1 is 
- 		select nombre_servidor from Servidor where nombre_servidor = nombreServ;
- 	begin
-            open c1;
-            fetch c1 into nombre;
-            eliminarServidor2(nombre); --Para elimnar estrategia hay que usar el metodo de david, pero con el nombre _servidor
-            delete from servidor where nombre_servidor = nombre;
-     end;
- /
- --Procedimiento para eliminar estrategia. (cuando se eliminar servidor)
- create or replace procedure eliminarServidor2(nombreServ varchar)
- 	is
-     nombreEst varchar2(20);
-     Cursor c1 is 
- 		select nombre_estrategia from estrategia where nombre_servidor = nombreServ;
- 	begin
-        open c1;
- 	fetch c1 into nombreEst;
-        while c1 % found loop
- 	delete from estrategia where nombre_servidor = nombreEst;
-        sp_dropJob(nombreEst); 
-        fetch c1 into nombreEst;
-        end loop;
-     end;
- /
  --Procedimiento para eliminar estrategia. (Eliminando solo la estrategia).
  create or replace procedure eliminarEstrategia(nombre varchar)
  	is
@@ -138,6 +108,36 @@ begin
 	commit;
 end;
 /
+
+ --Procedimiento para eliminar un servidor
+ create or replace procedure eliminarServidor(nombreServ varchar)
+ 	is
+ 	nombre varchar2(20);
+ 	Cursor c1 is 
+ 		select nombre_servidor from Servidor where nombre_servidor = nombreServ;
+ 	begin
+            open c1;
+            fetch c1 into nombre;
+            eliminarServidor2(nombre); --Para elimnar estrategia hay que usar el metodo de david, pero con el nombre _servidor
+            delete from servidor where nombre_servidor = nombre;
+     end;
+ /
+ --Procedimiento para eliminar estrategia. (cuando se eliminar servidor)
+ create or replace procedure eliminarServidor2(nombreServ varchar)
+ 	is
+     nombreEst varchar2(20);
+     Cursor c1 is 
+ 		select nombre_estrategia from estrategia where nombre_servidor = nombreServ;
+ 	begin
+        open c1;
+ 	fetch c1 into nombreEst;
+        while c1 % found loop
+ 	delete from estrategia where nombre_servidor = nombreEst;
+        sp_dropJob(nombreEst); 
+        fetch c1 into nombreEst;
+        end loop;
+     end;
+ /
  +
  +--Procedimiento que actualiza la frecuencia de la estrategia
  +create or replace procedure alterJob(estrategia varchar, frecuencia varchar)
