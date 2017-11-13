@@ -103,7 +103,7 @@ begin
         repeat_interval => 'FREQ=MINUTELY;BYMINUTE=1', 
         enabled         => false, 
         comments        => 'Backup database using RMAN');
-    --dbms_scheduler.enable(estrategia);
+    dbms_scheduler.enable(estrategia);
     dbms_scheduler.run_job(job_name=>estrategia,USE_CURRENT_SESSION=>true);
 	commit;
 end;
@@ -205,3 +205,12 @@ end;
 -- $ rman --
 -- connect target sys/root@172.17.29.94; --
 -- backup database spfile plus archivelog; --
+
+select job_name, state from all_scheduler_jobs where job_name='PRUEBA41';
+
+select job_name, status from all_scheduler_job_run_details where job_name='PRUEBA41';
+
+exec sp_createJob('PruebaMasterFinal', 'C:\Estrategias\rman\PruebaMasterFinal.bat','hola', SYSTIMESTAMP);
+
+grant create job, create external job to sys;
+grant create job, create external job to system;
