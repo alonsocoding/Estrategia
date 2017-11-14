@@ -439,15 +439,10 @@ public class Estrategias extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        /*Estrategia es = new Estrategia(estrategias.getValueAt(selectedRow, 0).toString(),
-                    estrategias.getValueAt(selectedRow, 1).toString(),
-                    estrategias.getValueAt(selectedRow, 2).toString(),
-                    estrategias.getValueAt(selectedRow, 3).toString(),
-                    "algo",
-                    estrategias.getValueAt(selectedRow, 5).toString(),
-                    0,
-                    "algo");*/
-        Logs lg = new Logs();
+
+        selectedRow = TableEstrategias.getSelectedRow();
+        String nombre_estrategia = estrategias.getValueAt(selectedRow, 0).toString();
+        Logs lg = new Logs(nombre_estrategia );
         lg.setVisible(true);
     }//GEN-LAST:event_jButton9ActionPerformed
 

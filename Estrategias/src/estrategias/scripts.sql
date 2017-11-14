@@ -86,7 +86,7 @@ insert into Estrategia values('ES04', 'Frio', 'Manual', 'Archive', 'USERS, TEMP'
  create or replace procedure sp_runJob(estrategia varchar)
  is
  begin 
-     dbms_scheduler.run_job(job_name=> estrategia,USE_CURRENT_SESSION=>false);
+     dbms_scheduler.run_job(job_name=> estrategia,USE_CURRENT_SESSION=>true);
     commit;
  end; 
  /
@@ -100,11 +100,9 @@ begin
         job_type        => 'EXECUTABLE', 
         job_action      => ruta, 
         start_date      => inicio, 
-        repeat_interval => 'FREQ=MINUTELY;BYMINUTE=1', 
-        enabled         => false, 
+        repeat_interval => frecuencia, 
+        enabled         => true, 
         comments        => 'Backup database using RMAN');
-    dbms_scheduler.enable(estrategia);
-    dbms_scheduler.run_job(job_name=>estrategia,USE_CURRENT_SESSION=>true);
 	commit;
 end;
 /
@@ -206,11 +204,27 @@ end;
 -- connect target sys/root@172.17.29.94; --
 -- backup database spfile plus archivelog; --
 
-select job_name, state from all_scheduler_jobs where job_name='PRUEBA41';
+select job_name, state from all_scheduler_jobs where job_name='SE06';
 
-select job_name, status from all_scheduler_job_run_details where job_name='PRUEBA41';
-
+select job_name, status from all_scheduler_job_run_details where job_name='SE06';
+exec sp_dropJob('SE10');
+exec sp_createJob('SE06', 'C:\Estrategias\rman\SE06.bat','hola', SYSTIMESTAMP);
 exec sp_createJob('PruebaMasterFinal', 'C:\Estrategias\rman\PruebaMasterFinal.bat','hola', SYSTIMESTAMP);
 
 grant create job, create external job to sys;
 grant create job, create external job to system;
+--JOB CORRECTO SIN PARAMETRIZAR
+create or replace procedure sp_createJob(estrategia varchar, ruta varchar, frecuencia varchar, inicio timestamp)
+is
+begin    
+    dbms_scheduler.create_job( 
+        job_name        => estrategia, 
+        job_type        => 'EXECUTABLE', 
+        job_action      => ruta, 
+        start_date      => SYSTIMESTAMP, 
+        repeat_interval => 'FREQ=MINUTELY;BYMINUTE=5', 
+        enabled         => true, 
+        comments        => 'Backup database using RMAN');
+	commit;
+end;
+/

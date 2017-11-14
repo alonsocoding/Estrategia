@@ -128,7 +128,7 @@ public class Dao {
     
     
      public static void createJob(String nombre_estrategia, String ruta, String frecuencia, Timestamp inicio) throws SQLException {
-        CallableStatement cst = conn.prepareCall("{call sp_createJob('" + nombre_estrategia + "', '"+ruta+"', 'FREQ=MINUTELY;BYMINUTE=1', SYSTIMESTAMP)}");
+        CallableStatement cst = conn.prepareCall("{call sp_createJob('" + nombre_estrategia + "', '"+ruta+"','"+frecuencia+"',SYSTIMESTAMP)}");
         cst.execute();
     }
 

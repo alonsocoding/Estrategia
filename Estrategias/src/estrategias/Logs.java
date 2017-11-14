@@ -25,7 +25,9 @@ public class Logs extends javax.swing.JFrame {
      */
     static DefaultTableModel logs = new DefaultTableModel();
     static int selectedRow = 0;
-    public Logs() {
+    static String estrategia ="";
+    public Logs(String es) {
+        estrategia = es;
         initComponents();
         this.setLocationRelativeTo(null);
         this.getContentPane().setBackground(new Color(44,112,213));
@@ -39,11 +41,11 @@ public class Logs extends javax.swing.JFrame {
         cargarLogs();
     }
     
-    public Logs(Estrategia es) {
-        initComponents();
-        System.out.println(es.nombre_estrategia);
-        //this.setLocationRelativeTo(null);
-        //this.getContentPane().setBackground(new Color(44,112,213));
+    public Logs() {
+          initComponents();
+//        System.out.println(es.nombre_estrategia);
+//        //this.setLocationRelativeTo(null);
+//        //this.getContentPane().setBackground(new Color(44,112,213));
         
     }
 
@@ -205,7 +207,7 @@ public class Logs extends javax.swing.JFrame {
         });
     }
     public void cargarLogs() {
-        String sDirectorio = "./logs";
+        String sDirectorio = "C:\\Estrategias\\logs\\"+estrategia;
         File f = new File(sDirectorio);
         File[] ficheros = f.listFiles();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");

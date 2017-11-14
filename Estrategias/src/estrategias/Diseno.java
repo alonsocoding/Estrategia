@@ -13,9 +13,12 @@ import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,6 +33,7 @@ public class Diseno extends javax.swing.JFrame {
     static ResultSet res = null;
     static DefaultTableModel tablespacesServ = new DefaultTableModel();
     static int selectedRow;
+    static boolean bandera = false;
 
     Servidor se = new Servidor("", "", "", "", "", 0);
 
@@ -444,15 +448,46 @@ public class Diseno extends javax.swing.JFrame {
             String modo = Manual.isSelected() ? Manual.getText() : Automatico.getText();
             String metodo = Archive.isSelected() ? Archive.getText() : NoArchive.getText();
             String objetos = "";
+            int count = Tablespaces.getRowCount();
             for (int i = 0; i < Tablespaces.getRowCount(); i++) {
-                if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
-                    objetos += Tablespaces.getValueAt(i, 0).toString() + ",";
+                if (Tablespaces.getValueAt(i, 1) != null) {
+                    if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
+                        objetos += Tablespaces.getValueAt(i, 0).toString() + ",";
+                    }
                 }
             }
 
             conn = Dao.Enlace(conn);
-
-            Periodos pe = new Periodos(TextNamePeriodo.getText(), false, false, false, false, false, false, false, 0, 0, 0);
+            Periodos pe = new Periodos(TextNamePeriodo.getText(), false, false, false, false, false, false, false, Integer.parseInt(textHora.getText()), Integer.parseInt(textMinutos.getText()), Integer.parseInt(textSegundos.getText()));
+            for (int i = 0; i < Dias.getRowCount(); i++) {
+                if (Dias.getValueAt(i, 1) != null) {
+                    if ("true".equals(Dias.getValueAt(i, 1).toString())) {
+                        switch (i) {
+                            case 0:
+                                pe.setLunes(true);
+                                break;
+                            case 1:
+                                pe.setMartes(true);
+                                break;
+                            case 2:
+                                pe.setMiercoles(true);
+                                break;
+                            case 3:
+                                pe.setJueves(true);
+                                break;
+                            case 4:
+                                pe.setViernes(true);
+                                break;
+                            case 5:
+                                pe.setSabado(true);
+                                break;
+                            case 6:
+                                pe.setDomingo(true);
+                                break;
+                        }
+                    }
+                }
+            }
             Dao.insertPeriodo(pe);
 
             Estrategia es = new Estrategia(TextNombreEstrategia.getText(), tipo, modo, metodo, objetos, TextNamePeriodo.getText(), 0, se.nombre_servidor);
@@ -464,14 +499,22 @@ public class Diseno extends javax.swing.JFrame {
             java.sql.Timestamp s = new java.sql.Timestamp(mls.getTime());
             if ("Automatico".equals(modo)) {
                 Dao.createJob(es.nombre_estrategia, "C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".bat", "FREQ=MINUTELY;BYMINUTE=1", s);
-                // Dao.runJob(TextNombreEstrategia.getText());
+                //Dao.runJob(TextNombreEstrategia.getText());
             }
-
-            conn.close();
-
+            Thread t = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        Dao.runJob(TextNombreEstrategia.getText());
+                        System.out.println("Realice estrategia");
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Diseno.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
+            t.start();
             JOptionPane.showMessageDialog(null, "La estrategia se ha registrado correctamente");
             this.setVisible(false);
-
+            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -524,16 +567,24 @@ public class Diseno extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Diseno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Diseno.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Diseno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Diseno.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Diseno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Diseno.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Diseno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Diseno.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -543,6 +594,7 @@ public class Diseno extends javax.swing.JFrame {
                 new Diseno().setVisible(true);
             }
         });
+
     }
 
     public void GuardarArchivosBat() {
@@ -551,13 +603,16 @@ public class Diseno extends javax.swing.JFrame {
             directorio.mkdirs();
             File directorio2 = new File("C:\\Estrategias\\logs");
             directorio2.mkdirs();
+            File directorioLogs = new File("C:\\Estrategias\\logs\\" + TextNombreEstrategia.getText() + "");
+            directorioLogs.mkdirs();
             // Escritura del archivo BAT
-            String texto = "set ORACLE_HOME=C:\\Oracle\\product\\11.2.0\\server\n"
+            java.util.Date mls = new java.util.Date();
+            java.sql.Timestamp s = new java.sql.Timestamp(mls.getTime());
+            String texto = "set ORACLE_HOME=C:\\oraclexe\\app\\oracle\\product\\11.2.0\\server\n"
                     + "set ORACLE_SID=XE \n"
                     + "set NLS_DATE_FORMAT=\"YYYY-MON-DD HH24:MI:SS\"\n"
                     + "\n"
-                    //+ "%ORACLE_HOME%\\bin\\rman log C:\\Estrategias\\logs\\" + TextNombreEstrategia.getText() + "\\"+ TextNombreEstrategia.getText()+jXDatePicker1.getDate().toString()+"-"+textHora.getText()+":"+textMinutos.getText()+":"+textSegundos.getText()+".log cmdfile C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv\n"
-                    + "%ORACLE_HOME%\\bin\\rman log C:\\Estrategias\\logs\\" + TextNombreEstrategia.getText() + ".log cmdfile C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv\n"
+                    + "%ORACLE_HOME%\\bin\\rman log C:\\Estrategias\\logs\\" + TextNombreEstrategia.getText() + "\\" + TextNombreEstrategia.getText() + "-" + String.valueOf(mls.getTime()) + ".log cmdfile C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv\n"
                     + "\n"
                     + "exit 0";
             FileWriter lector = new FileWriter("C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".bat");
@@ -577,8 +632,8 @@ public class Diseno extends javax.swing.JFrame {
                     try {
                         // Escritura del archivo RCV
                         String texto2 = "connect target sys/root@" + this.se.ip + ";\n"
-                                + "shutdown\n"
-                                + "startup mount\n"
+                                + "shutdown abort;\n"
+                                + "startup mount;\n"
                                 + "BACKUP DATABASE SPFILE PLUS ARCHIVELOG;\n"
                                 + "alter database open resetlogs;\n";
                         FileWriter lector2 = new FileWriter("C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv");
@@ -593,14 +648,16 @@ public class Diseno extends javax.swing.JFrame {
                     try {
                         String contenido = "";
                         for (int i = 0; i < this.Tablespaces.getRowCount(); i++) {
-                            if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
-                                contenido += "BACKUP TABLESPACE" + Tablespaces.getValueAt(i, 0).toString() + "PLUS ARCHIVELOG; \n";
+                            if (Tablespaces.getValueAt(i, 1) != null) {
+                                if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
+                                    contenido += "BACKUP TABLESPACE" + Tablespaces.getValueAt(i, 0).toString() + "PLUS ARCHIVELOG; \n";
+                                }
                             }
                         }
-                        if ("".equals(contenido)) {
+                        if (contenido != "") {
                             String texto = "connect target sys/root@" + this.se.ip + ";\n"
-                                    + "shutdown\n"
-                                    + "startup mount\n"
+                                    + "shutdown abort;\n"
+                                    + "startup mount;\n"
                                     + contenido
                                     + "alter database open resetlogs;\n";
 
@@ -620,8 +677,8 @@ public class Diseno extends javax.swing.JFrame {
 
                         // Escritura del archivo RCV
                         String texto2 = "connect target sys/root@" + this.se.ip + ";\n"
-                                + "shutdown\n"
-                                + "startup mount\n"
+                                + "shutdown abort;\n"
+                                + "startup mount;\n"
                                 + "BACKUP DATABASE;\n"
                                 + "alter database open resetlogs;\n";
                         FileWriter lector2 = new FileWriter("C:\\Estrategias\\rman\\" + TextNombreEstrategia.getText() + ".rcv");
@@ -636,11 +693,13 @@ public class Diseno extends javax.swing.JFrame {
                     try {
                         String contenido = "";
                         for (int i = 0; i < this.Tablespaces.getRowCount(); i++) {
-                            if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
-                                contenido += "BACKUP TABLESPACE" + Tablespaces.getValueAt(i, 0).toString() + "PLUS ARCHIVELOG; \n";
+                            if (Tablespaces.getValueAt(i, 1) != null) {
+                                if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
+                                    contenido += "BACKUP TABLESPACE" + Tablespaces.getValueAt(i, 0).toString() + "PLUS ARCHIVELOG; \n";
+                                }
                             }
                         }
-                        if ("".equals(contenido)) {
+                        if (contenido != "") {
                             String texto = "connect target sys/root@" + this.se.ip + ";\n"
                                     + "shutdown\n"
                                     + "startup mount\n"
@@ -678,11 +737,13 @@ public class Diseno extends javax.swing.JFrame {
                     try {
                         String contenido = "";
                         for (int i = 0; i < this.Tablespaces.getRowCount(); i++) {
-                            if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
-                                contenido += "BACKUP TABLESPACE" + Tablespaces.getValueAt(i, 0).toString() + "PLUS ARCHIVELOG; \n";
+                            if (Tablespaces.getValueAt(i, 1) != null) {
+                                if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
+                                    contenido += "BACKUP TABLESPACE " + Tablespaces.getValueAt(i, 0).toString() + " PLUS ARCHIVELOG; \n";
+                                }
                             }
                         }
-                        if ("".equals(contenido)) {
+                        if (contenido != "") {
                             String texto = "connect target sys/root@" + this.se.ip + ";\n"
                                     + contenido;
 
@@ -715,11 +776,13 @@ public class Diseno extends javax.swing.JFrame {
                     try {
                         String contenido = "";
                         for (int i = 0; i < this.Tablespaces.getRowCount(); i++) {
-                            if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
-                                contenido += "BACKUP TABLESPACE" + Tablespaces.getValueAt(i, 0).toString() + "PLUS ARCHIVELOG; \n";
+                            if (Tablespaces.getValueAt(i, 1) != null) {
+                                if ("true".equals(Tablespaces.getValueAt(i, 1).toString())) {
+                                    contenido += "BACKUP TABLESPACE" + Tablespaces.getValueAt(i, 0).toString() + "PLUS ARCHIVELOG; \n";
+                                }
                             }
                         }
-                        if ("".equals(contenido)) {
+                        if (contenido != "") {
                             String texto = "connect target sys/root@" + this.se.ip + ";\n"
                                     + contenido;
 
@@ -730,6 +793,7 @@ public class Diseno extends javax.swing.JFrame {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
+
                     }
                 }
             }

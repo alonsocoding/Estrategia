@@ -2,7 +2,6 @@
 
 -- Drop tables --
 
-drop table Contiene;
 drop table Estrategia;
 drop table Periodo;
 drop table Servidor;
@@ -66,6 +65,48 @@ insert into Estrategia values('ES04', 'Frio', 'Manual', 'Archive', 'USERS, TEMP'
 -----------------------------------------------------------------------------------------------
  --------------------------------------PROCEDIMIENTOS-------------------------------------------
  
+ --Procedimiento para eliminar estrategia. (Eliminando solo la estrategia).
+ create or replace procedure eliminarEstrategia(nombre varchar)
+ 	is
+ 	begin
+ 	delete from estrategia where nombre_estrategia = nombre;
+        sp_dropJob(nombre);
+     end;
+ /
+ --Procedmiento para elimnar el job de la estrategia.
+ create or replace procedure sp_dropJob(estrategia varchar)
+ is
+ begin 
+     dbms_scheduler.drop_job ( 
+         job_name    => estrategia);
+    commit;
+ end; 
+ /
+ 
+ create or replace procedure sp_runJob(estrategia varchar)
+ is
+ begin 
+     dbms_scheduler.run_job(job_name=> estrategia,USE_CURRENT_SESSION=>true);
+    commit;
+ end; 
+ /
+ 
+ -- Procedimiento para crear el job de la estrategia.
+create or replace procedure sp_createJob(estrategia varchar, ruta varchar, frecuencia varchar, inicio timestamp)
+is
+begin    
+    dbms_scheduler.create_job( 
+        job_name        => estrategia, 
+        job_type        => 'EXECUTABLE', 
+        job_action      => ruta, 
+        start_date      => inicio, 
+        repeat_interval => frecuencia, 
+        enabled         => true, 
+        comments        => 'Backup database using RMAN');
+	commit;
+end;
+/
+
  --Procedimiento para eliminar un servidor
  create or replace procedure eliminarServidor(nombreServ varchar)
  	is
@@ -95,49 +136,6 @@ insert into Estrategia values('ES04', 'Frio', 'Manual', 'Archive', 'USERS, TEMP'
         end loop;
      end;
  /
- --Procedimiento para eliminar estrategia. (Eliminando solo la estrategia).
- create or replace procedure eliminarEstrategia(nombre varchar)
- 	is
- 	begin
- 	delete from estrategia where nombre_estrategia = nombre;
-        sp_dropJob(nombre);
-     end;
- /
- --Procedmiento para elimnar el job de la estrategia.
- create or replace procedure sp_dropJob(estrategia varchar)
- is
- begin 
-     dbms_scheduler.drop_job ( 
-         job_name    => estrategia);
-    commit;
- end; 
- /
- 
- create or replace procedure sp_runJob(estrategia varchar)
- is
- begin 
-     dbms_scheduler.run_job(job_name=> estrategia,USE_CURRENT_SESSION=>false);
-    commit;
- end; 
- /
- 
- -- Procedimiento para crear el job de la estrategia.
-create or replace procedure sp_createJob(estrategia varchar, ruta varchar, frecuencia varchar, inicio timestamp)
-is
-begin    
-    dbms_scheduler.create_job( 
-        job_name        => estrategia, 
-        job_type        => 'EXECUTABLE', 
-        job_action      => ruta, 
-        start_date      => inicio, 
-        repeat_interval => 'FREQ=MINUTELY;BYMINUTE=1', 
-        enabled         => false, 
-        comments        => 'Backup database using RMAN');
-    --dbms_scheduler.enable(estrategia);
-    dbms_scheduler.run_job(job_name=>estrategia,USE_CURRENT_SESSION=>true);
-	commit;
-end;
-/
  +
  +--Procedimiento que actualiza la frecuencia de la estrategia
  +create or replace procedure alterJob(estrategia varchar, frecuencia varchar)
@@ -205,3 +203,28 @@ end;
 -- $ rman --
 -- connect target sys/root@172.17.29.94; --
 -- backup database spfile plus archivelog; --
+
+select job_name, state from all_scheduler_jobs where job_name='SE06';
+
+select job_name, status from all_scheduler_job_run_details where job_name='SE06';
+exec sp_dropJob('SE10');
+exec sp_createJob('SE06', 'C:\Estrategias\rman\SE06.bat','hola', SYSTIMESTAMP);
+exec sp_createJob('PruebaMasterFinal', 'C:\Estrategias\rman\PruebaMasterFinal.bat','hola', SYSTIMESTAMP);
+
+grant create job, create external job to sys;
+grant create job, create external job to system;
+--JOB CORRECTO SIN PARAMETRIZAR
+create or replace procedure sp_createJob(estrategia varchar, ruta varchar, frecuencia varchar, inicio timestamp)
+is
+begin    
+    dbms_scheduler.create_job( 
+        job_name        => estrategia, 
+        job_type        => 'EXECUTABLE', 
+        job_action      => ruta, 
+        start_date      => SYSTIMESTAMP, 
+        repeat_interval => 'FREQ=MINUTELY;BYMINUTE=5', 
+        enabled         => true, 
+        comments        => 'Backup database using RMAN');
+	commit;
+end;
+/
