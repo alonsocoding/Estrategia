@@ -13,7 +13,7 @@ public class Dao {
     static String bd = "XE";
     static String username = "sys as sysdba";
     static String password = "root";
-    static String url = "jdbc:oracle:thin:@LAPTOP-I8IV3KN9:1521:XE";
+    static String url = "jdbc:oracle:thin:@Josema:1521:XE";
 
     public static Connection Enlace(Connection conn) throws SQLException {
         try {
@@ -66,12 +66,11 @@ public class Dao {
         st.executeQuery("commit");
     }
     
-    public static void updateServidor(Servidor se) throws SQLException {
+   public static void updateServidor(Servidor se) throws SQLException {
         st = Sta(st);
-        st.executeQuery("update Servidor set nombre_base = '"+se.nombre_base+"', nombre_usuario = '"+se.nombre_usuario+"', contrasena = '"+se.contrasena+"', ip = '"+se.ip+"', puerto = '"+se.puerto+"' where nombre_servidor = '"+se.nombre_servidor+"'");
+        st.executeQuery("update Servidor set nombre_usuario = '"+se.nombre_usuario+"', contrasena = '"+se.contrasena+"', ip = '"+se.ip+"', puerto = '"+se.puerto+"', nombre_base = '"+se.nombre_base+"' where nombre_servidor = '"+se.nombre_servidor+"'");
         st.executeQuery("commit");
     }
-    
     public static void deleteServidor(String nombre_servidor) throws SQLException {
         st = Sta(st);
         st.executeQuery("delete from Estrategia where nombre_servidor = '"+nombre_servidor+"'");

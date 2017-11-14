@@ -207,7 +207,7 @@ public class MonitorJobs extends javax.swing.JFrame {
     }//GEN-LAST:event_ServidorTextActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
+      try {
             Servidor se = new Servidor(
                 ServidorText.getText(),
                 BaseText.getText(),
@@ -215,14 +215,10 @@ public class MonitorJobs extends javax.swing.JFrame {
                 ContrasenaText.getText(),
                 IPText.getText(),
                 Integer.parseInt(PuertoText.getText()));
-            // Conexion con base y lanza sql --->Primero eliminamos el servidor.
+            // Conexion con base y lanza sql
             conn = Dao.Enlace(conn);
-            Dao.deleteServidor(ServidorText.getText());
-            //Crea un nuevo servidor con los datos nuevos jjj.
-            Dao.insertServidor(se);
-            Dao.createDatabaseLink(ServidorText.getText(), BaseText.getText(), UsuarioText.getText() ,ContrasenaText.getText(), IPText.getText(), PuertoText.getText());
-         
- 
+            Dao.updateServidor(se);
+
             conn.close();
 
         } catch (Exception e) {

@@ -2,11 +2,19 @@
 
 -- Drop tables --
 
+drop table Evidencia;
 drop table Estrategia;
 drop table Periodo;
 drop table Servidor;
 
 -- Crear la tabla servidores --
+create table Evidencia (
+    nombre_estrategia varchar(20),
+    run varchar(100),
+    exitoso varchar(20),
+    fecha_inicio varchar(20),
+    fecha_final varchar(20)
+);
 
 create table Servidor (
     nombre_servidor varchar(20),
