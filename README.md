@@ -1,6 +1,5 @@
 # Estrategia
-Monitor para la Creacion y Manejo de las Estrategias de Respaldo
-:poop: :poop: :poop: :poop: :poop: :poop:
+Monitor para la Creacion y Manejo de las Estrategias de Respaldo para bases de datos Oracle
 
 Rubrica:
 - Interfaz 1pt.
